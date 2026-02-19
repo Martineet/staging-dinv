@@ -49,6 +49,119 @@
             margin: 0 auto;
         }
 
+        /* Calculator Section */
+        .calculator-section {
+            max-width: 500px;
+            margin: 0 auto 40px;
+        }
+
+        .calculator-card {
+            background: #0a0e27;
+            border: 1px solid #2d3548;
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .calc-row {
+            margin-bottom: 20px;
+        }
+
+        .calc-row label {
+            display: block;
+            margin-bottom: 8px;
+            color: #9ca3af;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .calc-row input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #2d3548;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .calc-row input:focus {
+            outline: none;
+            border-color: #f59e0b;
+        }
+
+        .calc-result {
+            margin-top: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(245, 158, 11, 0.05) 100%);
+            border: 1px solid #f59e0b;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .result-label {
+            color: #9ca3af;
+            font-size: 13px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .result-value {
+            color: #f59e0b;
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        /* Summary Section */
+        .summary-section {
+            margin-bottom: 40px;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .summary-card {
+            background: #0a0e27;
+            border: 1px solid #2d3548;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .summary-card:hover {
+            border-color: #f59e0b;
+            transform: translateY(-2px);
+        }
+
+        .summary-card.highlight {
+            border-color: #f59e0b;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(245, 158, 11, 0.05) 100%);
+        }
+
+        .summary-icon {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .summary-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 5px;
+        }
+
+        .summary-label {
+            font-size: 11px;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
         .form-group {
             margin-bottom: 20px;
         }
@@ -321,6 +434,18 @@
                 grid-template-columns: 1fr;
             }
 
+            .summary-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .calculator-card {
+                padding: 16px;
+            }
+
+            .result-value {
+                font-size: 24px;
+            }
+
             .btc-logo {
                 width: 40px;
                 height: 40px;
@@ -339,6 +464,12 @@
                 padding: 8px;
             }
         }
+
+        @media (max-width: 768px) and (min-width: 601px) {
+            .summary-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
     </style>
 </head>
 <body>
@@ -348,28 +479,96 @@
             <h1>🪙 D.Inversions</h1>
             <p class="subtitle">Track your Bitcoin investments</p>
             
-            <form class="login-form" id="loginForm">
-                <div class="form-group">
-                    <label for="username">Select Your Name</label>
-                    <select id="username" required>
-                        <option value="">Choose...</option>
-                        <option value="user0">Test</option>
-                        <option value="user1">Gabriela</option>
-                        <option value="user2">Estefania</option>
-                        <option value="user3">Josep</option>
-                        <option value="user4">Sabina</option>
-                        <option value="user5">Arnau</option>
-                    </select>
+            <!-- Login Form -->
+            <div style="margin-bottom: 40px;">
+                <h2 style="color: #ffffff; font-size: 1.1em; margin-bottom: 20px; text-align: center;">🔐 Member Login</h2>
+                <form class="login-form" id="loginForm">
+                    <div class="form-group">
+                        <label for="username">Select Your Name</label>
+                        <select id="username" required>
+                            <option value="">Choose...</option>
+                            <option value="user0">Test</option>
+                            <option value="user1">Gabriela</option>
+                            <option value="user2">Estefania</option>
+                            <option value="user3">Josep</option>
+                            <option value="user4">Sabina</option>
+                            <option value="user5">Arnau</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" required placeholder="Enter your password">
+                    </div>
+                    
+                    <button type="submit">Login</button>
+                    <div class="error" id="loginError"></div>
+                </form>
+            </div>
+
+            <!-- Portfolio Summary -->
+            <div class="summary-section" style="padding-top: 30px; border-top: 1px solid #2d3548;">
+                <h2 style="color: #ffffff; font-size: 1.3em; margin-bottom: 15px; text-align: center;">📊 D.Inversions Portfolio</h2>
+                <div class="summary-grid">
+                    <div class="summary-card">
+                        <div class="summary-icon">₿</div>
+                        <div class="summary-value" id="summaryTotalBTC">-- BTC</div>
+                        <div class="summary-label">Bitcoin Hodled</div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-icon">👥</div>
+                        <div class="summary-value" id="summaryBitcoiners">--</div>
+                        <div class="summary-label">Bitcoiners</div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-icon">💵</div>
+                        <div class="summary-value" id="summaryTheoreticalValue">-- €</div>
+                        <div class="summary-label">Real Time Value</div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-icon">💰</div>
+                        <div class="summary-value" id="summaryTotalInvestment">-- €</div>
+                        <div class="summary-label">Total Invested</div>
+                    </div>
+                    <div class="summary-card highlight">
+                        <div class="summary-icon">📈</div>
+                        <div class="summary-value" id="summaryResult" style="color: #f59e0b;">-- €</div>
+                        <div class="summary-label">Portfolio Result</div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-icon">🛡️</div>
+                        <div class="summary-value" id="summaryGuaranteed">-- €</div>
+                        <div class="summary-label">Guaranteed Amount</div>
+                    </div>
                 </div>
-                
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" required placeholder="Enter your password">
+            </div>
+            
+            <!-- Bitcoin Investment Calculator -->
+            <div class="calculator-section" style="margin-top: 40px; padding-top: 30px; border-top: 1px solid #2d3548;">
+                <h2 style="color: #ffffff; font-size: 1.3em; margin-bottom: 15px; text-align: center;">💰 Bitcoin Investment Calculator</h2>
+                <div class="calculator-card">
+                    <div class="calc-row">
+                        <label>Current BTC Price</label>
+                        <input type="text" id="calcCurrentPrice" readonly style="background: #0a0e27; color: #9ca3af;">
+                    </div>
+                    <div class="calc-row">
+                        <label>Annual Growth Rate (%)</label>
+                        <input type="number" id="calcGrowthRate" value="20" min="0" max="1000" style="background: #0a0e27; color: #ffffff;">
+                    </div>
+                    <div class="calc-row">
+                        <label>Investment Amount (€)</label>
+                        <input type="number" id="calcInvestment" placeholder="1000" min="0" style="background: #0a0e27; color: #ffffff;">
+                    </div>
+                    <div class="calc-row">
+                        <label>Expected BTC Price (4 years)</label>
+                        <input type="number" id="calcFuturePrice" style="background: #0a0e27; color: #f59e0b; font-weight: 600;">
+                    </div>
+                    <div class="calc-result">
+                        <div class="result-label">Expected Final Value (4 years)</div>
+                        <div class="result-value" id="calcFinalValue">-- €</div>
+                    </div>
                 </div>
-                
-                <button type="submit">Login</button>
-                <div class="error" id="loginError"></div>
-            </form>
+            </div>
         </div>
 
         <!-- Dashboard -->
@@ -380,6 +579,7 @@
             </div>
 
             <div class="stats-grid">
+                <!-- First Row -->
                 <div class="stat-card">
                     <div class="stat-label">Current BTC Price</div>
                     <div class="stat-value" id="btcPrice">-- €</div>
@@ -392,13 +592,27 @@
                     <div class="stat-label">Current Value</div>
                     <div class="stat-value" id="currentValue">-- €</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-label">Profit/Loss</div>
-                    <div class="stat-value" id="profitLoss">-- €</div>
-                </div>
                 <div class="stat-card highlight">
                     <div class="stat-label">🛡️ Guaranteed Investment</div>
                     <div class="stat-value" id="guaranteedAmount" style="color: #f59e0b;">-- €</div>
+                </div>
+                
+                <!-- Second Row -->
+                <div class="stat-card highlight">
+                    <div class="stat-label">💰 Final Value</div>
+                    <div class="stat-value" id="finalValue" style="color: #f59e0b;">-- €</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Result</div>
+                    <div class="stat-value" id="profitLoss">-- €</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">💸 Total Commissions</div>
+                    <div class="stat-value" id="totalCommissions">-- €</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">🧾 Total Taxes</div>
+                    <div class="stat-value" id="totalTaxes">-- €</div>
                 </div>
             </div>
 
@@ -436,6 +650,9 @@
             SPREADSHEET_ID: '1UCQroofyrew-P6RgHk5wL0yz898yrJxomZIp9z5mSnE'
         };
 
+        // Tax rate (21%)
+        const TAX_RATE = 0.21;
+
         // Simple password storage (you'll update these)
         const USERS = {
             'user0': { password: '0000', name: 'test@dinversions.org' },
@@ -449,23 +666,136 @@
         // Demo data structure - this will come from Google Sheets
         const DEMO_DATA = {
             'user0': [
-                { date: '2024-01-15', btcAmount: 0.00005, eurAmount: 200, purchasePrice: 45000, guaranteed: true },
-                { date: '2024-06-20', btcAmount: 0.00003, eurAmount: 100, purchasePrice: 50000, guaranteed: true },
-                { date: '2025-03-10', btcAmount: 0.0002, eurAmount: 1000, purchasePrice: 90000, guaranteed: false },
-                { date: '2025-12-01', btcAmount: 0.015, eurAmount: 50, purchasePrice: 90000, guaranteed: true }
+                { date: '2024-01-15', btcAmount: 0.00005, eurAmount: 200, purchasePrice: 45000, guaranteed: true, commission: 0.05 },
+                { date: '2024-06-20', btcAmount: 0.00003, eurAmount: 100, purchasePrice: 50000, guaranteed: true, commission: 0.10 },
+                { date: '2025-03-10', btcAmount: 0.0002, eurAmount: 1000, purchasePrice: 90000, guaranteed: false, commission: 0.05 },
+                { date: '2025-12-01', btcAmount: 0.015, eurAmount: 50, purchasePrice: 90000, guaranteed: true, commission: 0 }
             ],
             'user1': [
-                { date: '2024-01-15', btcAmount: 0.05, eurAmount: 2250, purchasePrice: 45000, guaranteed: true },
-                { date: '2024-02-20', btcAmount: 0.03, eurAmount: 1500, purchasePrice: 50000, guaranteed: false }
+                { date: '2024-01-15', btcAmount: 0.05, eurAmount: 2250, purchasePrice: 45000, guaranteed: true, commission: 0.05 },
+                { date: '2024-02-20', btcAmount: 0.03, eurAmount: 1500, purchasePrice: 50000, guaranteed: false, commission: 0.10 }
             ],
             'user2': [
-                { date: '2024-01-10', btcAmount: 0.1, eurAmount: 4400, purchasePrice: 44000, guaranteed: true }
+                { date: '2024-01-10', btcAmount: 0.1, eurAmount: 4400, purchasePrice: 44000, guaranteed: true, commission: 0.05 }
             ],
             // Add more users as needed
         };
 
         let currentUser = null;
         let currentBTCPrice = 0;
+        const DEFAULT_GROWTH_RATE = 20; // 20% annual growth
+
+        // Initialize calculator and summary on page load
+        async function initializeLandingPage() {
+            await fetchBTCPrice();
+            updateCalculator();
+            calculatePortfolioSummary();
+        }
+
+        // Update calculator
+        function updateCalculator() {
+            const growthRate = parseFloat(document.getElementById('calcGrowthRate').value) || DEFAULT_GROWTH_RATE;
+            const investment = parseFloat(document.getElementById('calcInvestment').value) || 0;
+            
+            // Display current BTC price
+            document.getElementById('calcCurrentPrice').value = currentBTCPrice.toLocaleString('de-DE') + ' €';
+            
+            // Calculate future price (4 years with compound growth)
+            const futurePrice = currentBTCPrice * Math.pow(1 + (growthRate / 100), 4);
+            document.getElementById('calcFuturePrice').value = futurePrice.toFixed(0);
+            
+            // Calculate expected final value
+            if (investment > 0 && currentBTCPrice > 0) {
+                const btcAmount = investment / currentBTCPrice;
+                const finalValue = btcAmount * futurePrice;
+                document.getElementById('calcFinalValue').textContent = 
+                    finalValue.toLocaleString('de-DE', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' €';
+            } else {
+                document.getElementById('calcFinalValue').textContent = '-- €';
+            }
+        }
+
+        // Update growth rate based on future price input
+        function updateGrowthRateFromPrice() {
+            const futurePrice = parseFloat(document.getElementById('calcFuturePrice').value) || 0;
+            const investment = parseFloat(document.getElementById('calcInvestment').value) || 0;
+            
+            if (futurePrice > 0 && currentBTCPrice > 0) {
+                // Calculate the implied annual growth rate
+                // futurePrice = currentPrice * (1 + rate)^4
+                // rate = (futurePrice / currentPrice)^(1/4) - 1
+                const growthMultiplier = futurePrice / currentBTCPrice;
+                const annualGrowthRate = (Math.pow(growthMultiplier, 1/4) - 1) * 100;
+                
+                // Update growth rate input
+                document.getElementById('calcGrowthRate').value = annualGrowthRate.toFixed(1);
+                
+                // Calculate expected final value
+                if (investment > 0) {
+                    const btcAmount = investment / currentBTCPrice;
+                    const finalValue = btcAmount * futurePrice;
+                    document.getElementById('calcFinalValue').textContent = 
+                        finalValue.toLocaleString('de-DE', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' €';
+                }
+            }
+        }
+
+        // Calculate portfolio summary from all users
+        function calculatePortfolioSummary() {
+            let totalBTC = 0;
+            let totalInvestment = 0;
+            let totalGuaranteed = 0;
+            let bitcoiners = 0;
+            
+            // Iterate through all users
+            Object.keys(DEMO_DATA).forEach(userId => {
+                const investments = DEMO_DATA[userId] || [];
+                let userBTC = 0;
+                
+                investments.forEach(inv => {
+                    totalBTC += inv.btcAmount;
+                    userBTC += inv.btcAmount;
+                    totalInvestment += inv.eurAmount;
+                    
+                    if (inv.guaranteed) {
+                        totalGuaranteed += inv.eurAmount;
+                    }
+                });
+                
+                // Count user as bitcoiner if they have any BTC
+                if (userBTC > 0) {
+                    bitcoiners++;
+                }
+            });
+            
+            const totalVolume = totalBTC * currentBTCPrice; // Full value without conservative reduction
+            const portfolioResult = totalVolume - totalInvestment;
+            
+            // Update summary cards - NO DECIMALS
+            document.getElementById('summaryTotalBTC').textContent = 
+                totalBTC.toFixed(8) + ' BTC';
+            document.getElementById('summaryBitcoiners').textContent = bitcoiners;
+            document.getElementById('summaryTheoreticalValue').textContent = 
+                Math.round(totalVolume).toLocaleString('de-DE') + ' €';
+            document.getElementById('summaryTotalInvestment').textContent = 
+                Math.round(totalInvestment).toLocaleString('de-DE') + ' €';
+            document.getElementById('summaryGuaranteed').textContent = 
+                Math.round(totalGuaranteed).toLocaleString('de-DE') + ' €';
+            
+            const resultSign = portfolioResult >= 0 ? '+' : '';
+            document.getElementById('summaryResult').textContent = 
+                resultSign + Math.round(portfolioResult).toLocaleString('de-DE') + ' €';
+            document.getElementById('summaryResult').style.color = portfolioResult >= 0 ? '#10b981' : '#ef4444';
+        }
+
+        // Calculator input listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeLandingPage();
+            
+            document.getElementById('calcGrowthRate').addEventListener('input', updateCalculator);
+            document.getElementById('calcInvestment').addEventListener('input', updateCalculator);
+            document.getElementById('calcFuturePrice').addEventListener('input', updateGrowthRateFromPrice);
+        });
 
         // Login handler
         document.getElementById('loginForm').addEventListener('submit', function(e) {
@@ -524,6 +854,9 @@
             let totalInvested = 0;
             let totalBTC = 0;
             let totalGuaranteed = 0;
+            let totalFinalValue = 0;
+            let totalCommissionsSum = 0;
+            let totalTaxesSum = 0;
             let tableHTML = `
                 <table>
                     <thead>
@@ -533,6 +866,7 @@
                             <th>EUR Invested</th>
                             <th>Purchase Price</th>
                             <th>Current Value</th>
+                            <th>Commission</th>
                             <th>Profit/Loss</th>
                             <th>Guaranteed</th>
                             <th>Guarantee Date</th>
@@ -542,12 +876,41 @@
             `;
 
             investments.forEach(inv => {
-                const currentValue = inv.btcAmount * currentBTCPrice;
+                // Apply conservative 1% reduction to current value
+                const rawCurrentValue = inv.btcAmount * currentBTCPrice;
+                const currentValue = rawCurrentValue * 0.99;
                 const profitLoss = currentValue - inv.eurAmount;
-                const profitLossPercent = ((profitLoss / inv.eurAmount) * 100).toFixed(2);
+                
+                // Calculate commission, taxes, and final value for this transaction
+                let commissionFlat = 0;
+                let taxes = 0;
+                let finalValue = currentValue;
+                
+                if (currentValue > inv.eurAmount) {
+                    // Profitable transaction
+                    const profit = currentValue - inv.eurAmount;
+                    commissionFlat = profit * inv.commission;
+                    const valueAfterCommission = currentValue - commissionFlat;
+                    const taxableProfit = valueAfterCommission - inv.eurAmount;
+                    taxes = taxableProfit * TAX_RATE;
+                    finalValue = valueAfterCommission - taxes;
+                } else {
+                    // Loss or break-even - no commissions or taxes
+                    commissionFlat = 0;
+                    taxes = 0;
+                    finalValue = currentValue;
+                    
+                    // If guaranteed, protect the investment amount
+                    if (inv.guaranteed && finalValue < inv.eurAmount) {
+                        finalValue = inv.eurAmount;
+                    }
+                }
 
                 totalInvested += inv.eurAmount;
                 totalBTC += inv.btcAmount;
+                totalFinalValue += finalValue;
+                totalCommissionsSum += commissionFlat;
+                totalTaxesSum += taxes;
                 
                 // Calculate guarantee date (4 years after purchase)
                 const purchaseDate = new Date(inv.date);
@@ -564,6 +927,7 @@
                 const plSign = profitLoss >= 0 ? '+' : '';
                 const guaranteedIcon = inv.guaranteed ? '✅' : '❌';
                 const guaranteedText = inv.guaranteed ? 'Yes' : 'No';
+                const commissionPercent = (inv.commission * 100).toFixed(0) + '%';
 
                 tableHTML += `
                     <tr>
@@ -572,7 +936,8 @@
                         <td>${inv.eurAmount.toLocaleString('de-DE', {minimumFractionDigits: 2, maximumFractionDigits: 2})} €</td>
                         <td>${inv.purchasePrice.toLocaleString('de-DE')} €</td>
                         <td>${currentValue.toLocaleString('de-DE', {minimumFractionDigits: 2, maximumFractionDigits: 2})} €</td>
-                        <td class="${plClass}">${plSign}${profitLoss.toLocaleString('de-DE', {minimumFractionDigits: 2, maximumFractionDigits: 2})} € (${plSign}${profitLossPercent}%)</td>
+                        <td style="text-align: center;">${commissionPercent}</td>
+                        <td class="${plClass}">${plSign}${profitLoss.toLocaleString('de-DE', {minimumFractionDigits: 2, maximumFractionDigits: 2})} €</td>
                         <td style="text-align: center;">${guaranteedIcon} ${guaranteedText}</td>
                         <td>${inv.guaranteed ? guaranteeDateStr : '-'}</td>
                     </tr>
@@ -583,13 +948,19 @@
             document.getElementById('tableContent').innerHTML = tableHTML;
 
             // Update summary cards
-            const totalCurrentValue = totalBTC * currentBTCPrice;
+            const totalCurrentValue = totalBTC * currentBTCPrice * 0.99; // Apply conservative 1% reduction
             const totalProfitLoss = totalCurrentValue - totalInvested;
 
             document.getElementById('totalInvested').textContent = 
                 totalInvested.toLocaleString('de-DE', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' €';
             document.getElementById('currentValue').textContent = 
                 totalCurrentValue.toLocaleString('de-DE', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' €';
+            document.getElementById('finalValue').textContent = 
+                totalFinalValue.toLocaleString('de-DE', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' €';
+            document.getElementById('totalCommissions').textContent = 
+                totalCommissionsSum.toLocaleString('de-DE', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' €';
+            document.getElementById('totalTaxes').textContent = 
+                totalTaxesSum.toLocaleString('de-DE', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' €';
             document.getElementById('guaranteedAmount').textContent = 
                 totalGuaranteed.toLocaleString('de-DE', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' €';
             
