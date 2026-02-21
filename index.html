@@ -400,7 +400,21 @@ let authListenerPaused  = false;  // paused during password-change countdown
 //  Auth state listener — runs on every page load + change
 // ─────────────────────────────────────────────────────────
 sb.auth.onAuthStateChange(async (event, session) => {
-    if (authListenerPaused) return;   // ignore events during password-change countdown
+    // USER_UPDATED fires when password is changed.
+    // Sign out first, then reload so the session is fully cleared.
+    if (event === 'USER_UPDATED') {
+        sessionStorage.setItem('pw_changed', '1');
+        await sb.auth.signOut();
+        return;   // SIGNED_OUT event will fire next and trigger the reload below
+    }
+
+    // After password change, SIGNED_OUT fires — reload to clean login page
+    if (event === 'SIGNED_OUT' && sessionStorage.getItem('pw_changed')) {
+        sessionStorage.removeItem('pw_changed');
+        location.reload();
+        return;
+    }
+
     currentSession = session;
 
     if (session) {
@@ -516,22 +530,8 @@ async function saveNewPassword() {
         btn.textContent = 'Save';
         errEl.textContent = error.message;
     } else {
-        // Lock the modal — nothing clickable while countdown runs
-        btn.disabled = true;
-        document.getElementById('confirmPassword').disabled = true;
-        document.getElementById('newPassword').disabled     = true;
-        document.querySelector('#changePasswordModal .btn-secondary').disabled = true;
-        okEl.textContent = '✅ Password updated! Logging out in 2 seconds…';
-
-        // Temporarily pause the auth state listener so it doesn’t
-        // hide the dashboard/modal while the success message is visible
-        authListenerPaused = true;
-
-        setTimeout(async () => {
-            authListenerPaused = false;
-            await sb.auth.signOut();
-            location.reload();
-        }, 2000);
+        // Success — onAuthStateChange catches USER_UPDATED and reloads cleanly.
+        okEl.textContent = '✅ Password updated! Logging out…';
     }
 }
 
