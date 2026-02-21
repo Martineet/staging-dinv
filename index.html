@@ -295,27 +295,6 @@
             </div>
         </div>
 
-        <!-- Change Password Modal -->
-        <div class="modal-overlay" id="changePasswordModal">
-            <div class="modal">
-                <h3>🔑 Change Password</h3>
-                <div class="form-group">
-                    <label for="newPassword">New password</label>
-                    <input type="password" id="newPassword" placeholder="At least 6 characters" autocomplete="new-password">
-                </div>
-                <div class="form-group">
-                    <label for="confirmPassword">Confirm new password</label>
-                    <input type="password" id="confirmPassword" placeholder="Repeat password" autocomplete="new-password">
-                </div>
-                <div class="error" id="pwError"></div>
-                <div class="info-msg" id="pwSuccess"></div>
-                <div class="modal-actions">
-                    <button class="btn-secondary" onclick="closeChangePassword()">Cancel</button>
-                    <button id="savePwBtn" onclick="saveNewPassword()">Save</button>
-                </div>
-            </div>
-        </div>
-
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-label">Current BTC Price</div>
@@ -359,6 +338,27 @@
         </div>
     </div>
 
+    <!-- Change Password Modal (outside dashboard so it never gets hidden mid-flow) -->
+    <div class="modal-overlay" id="changePasswordModal">
+        <div class="modal">
+            <h3>🔑 Change Password</h3>
+            <div class="form-group">
+                <label for="newPassword">New password</label>
+                <input type="password" id="newPassword" placeholder="At least 6 characters" autocomplete="new-password">
+            </div>
+            <div class="form-group">
+                <label for="confirmPassword">Confirm new password</label>
+                <input type="password" id="confirmPassword" placeholder="Repeat password" autocomplete="new-password">
+            </div>
+            <div class="error" id="pwError"></div>
+            <div class="info-msg" id="pwSuccess"></div>
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="closeChangePassword()">Cancel</button>
+                <button id="savePwBtn" onclick="saveNewPassword()">Save</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Logos -->
     <div class="dinversions-logo"><img src="log1.png" alt="D.Inversions Logo"></div>
     <div class="btc-logo"><img src="https://cryptologos.cc/logos/bitcoin-btc-logo.svg" alt="Bitcoin Logo"></div>
@@ -392,13 +392,15 @@ const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
 const TAX_RATE          = 0.21;
 const DEFAULT_GROWTH    = 20;   // % annual
 
-let currentBTCPrice = 0;
-let currentSession  = null;   // Supabase session object
+let currentBTCPrice     = 0;
+let currentSession      = null;   // Supabase session object
+let authListenerPaused  = false;  // paused during password-change countdown
 
 // ─────────────────────────────────────────────────────────
 //  Auth state listener — runs on every page load + change
 // ─────────────────────────────────────────────────────────
 sb.auth.onAuthStateChange(async (event, session) => {
+    if (authListenerPaused) return;   // ignore events during password-change countdown
     currentSession = session;
 
     if (session) {
@@ -514,16 +516,20 @@ async function saveNewPassword() {
         btn.textContent = 'Save';
         errEl.textContent = error.message;
     } else {
-        // Disable all modal controls so nothing can be clicked while we wait
+        // Lock the modal — nothing clickable while countdown runs
         btn.disabled = true;
         document.getElementById('confirmPassword').disabled = true;
         document.getElementById('newPassword').disabled     = true;
+        document.querySelector('#changePasswordModal .btn-secondary').disabled = true;
         okEl.textContent = '✅ Password updated! Logging out in 2 seconds…';
 
-        // Force a hard sign-out after 2s — clears the broken session completely
+        // Temporarily pause the auth state listener so it doesn’t
+        // hide the dashboard/modal while the success message is visible
+        authListenerPaused = true;
+
         setTimeout(async () => {
+            authListenerPaused = false;
             await sb.auth.signOut();
-            localStorage.clear();
             location.reload();
         }, 2000);
     }
