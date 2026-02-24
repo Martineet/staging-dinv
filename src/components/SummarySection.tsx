@@ -38,28 +38,28 @@ export function SummarySection({ summary, btcPrice }: SummarySectionProps) {
         <div className="summary-card">
           <div className="summary-icon">💵</div>
           <div className="summary-value">
-            {summary ? `${formatMoneyRounded(totalVolume)} EUR` : '-- EUR'}
+            {summary ? `${formatMoneyRounded(totalVolume)} €` : '-- €'}
           </div>
           <div className="summary-label">Real Time Value</div>
         </div>
         <div className="summary-card">
           <div className="summary-icon">💰</div>
           <div className="summary-value">
-            {summary ? `${formatMoneyRounded(totalInvested)} EUR` : '-- EUR'}
+            {summary ? `${formatMoneyRounded(totalInvested)} €` : '-- €'}
           </div>
           <div className="summary-label">Total Invested</div>
         </div>
         <div className="summary-card highlight">
           <div className="summary-icon">📈</div>
           <div className={`summary-value ${summary ? resultClass : ''}`}>
-            {summary ? `${resultSign}${formatMoneyRounded(portfolioResult)} EUR` : '-- EUR'}
+            {summary ? `${resultSign}${formatMoneyRounded(portfolioResult)} €` : '-- €'}
           </div>
           <div className="summary-label">Portfolio Result</div>
         </div>
         <div className="summary-card">
           <div className="summary-icon">🛡️</div>
           <div className="summary-value">
-            {summary ? `${formatMoneyRounded(totalGuaranteed)} EUR` : '-- EUR'}
+            {summary ? `${formatMoneyRounded(totalGuaranteed)} €` : '-- €'}
           </div>
           <div className="summary-label">Guaranteed Amount</div>
         </div>

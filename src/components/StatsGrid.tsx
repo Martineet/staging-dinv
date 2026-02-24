@@ -8,8 +8,8 @@ type StatsGridProps = {
 
 export function StatsGrid({ totals, btcPrice }: StatsGridProps) {
   const display = (value: number | null | undefined) => {
-    if (!totals || value === null || value === undefined) return '-- EUR';
-    return `${formatMoney(value)} EUR`;
+    if (!totals || value === null || value === undefined) return '-- €';
+    return `${formatMoney(value)} €`;
   };
 
   const profitLoss = totals ? totals.totalProfitLoss : 0;
@@ -19,7 +19,7 @@ export function StatsGrid({ totals, btcPrice }: StatsGridProps) {
     <div className="stats-grid">
       <div className="stat-card">
         <div className="stat-label">Current BTC Price</div>
-        <div className="stat-value">{btcPrice ? `${formatMoney(btcPrice)} EUR` : '-- EUR'}</div>
+        <div className="stat-value">{btcPrice ? `${formatMoney(btcPrice)} €` : '-- €'}</div>
       </div>
       <div className="stat-card">
         <div className="stat-label">Total Invested</div>
@@ -40,7 +40,7 @@ export function StatsGrid({ totals, btcPrice }: StatsGridProps) {
       <div className="stat-card">
         <div className="stat-label">Result</div>
         <div className={`stat-value ${profitLoss >= 0 ? 'positive' : 'negative'}`}>
-          {totals ? `${profitSign}${formatMoney(profitLoss)} EUR` : '-- EUR'}
+          {totals ? `${profitSign}${formatMoney(profitLoss)} €` : '-- €'}
         </div>
       </div>
       <div className="stat-card">

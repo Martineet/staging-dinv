@@ -7,7 +7,7 @@ type LandingHeaderProps = {
 };
 
 export function LandingHeader({ btcPrice }: LandingHeaderProps) {
-  const displayPrice = btcPrice ? `${formatMoneyRounded(btcPrice)} EUR` : '-- EUR';
+  const displayPrice = btcPrice ? `${formatMoneyRounded(btcPrice)} €` : '-- €';
 
   return (
     <div className="login-header">

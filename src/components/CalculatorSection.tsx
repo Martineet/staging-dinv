@@ -19,8 +19,8 @@ export function CalculatorSection({ btcPrice }: CalculatorSectionProps) {
     handleFuturePriceChange
   } = useCalculator(btcPrice);
 
-  const displayCurrent = btcPrice ? `${formatMoney(btcPrice)} EUR` : '-- EUR';
-  const displayFinal = finalValue ? `${formatMoney(finalValue)} EUR` : '-- EUR';
+  const displayCurrent = btcPrice ? `${formatMoney(btcPrice)} €` : '-- €';
+  const displayFinal = finalValue ? `${formatMoney(finalValue)} €` : '-- €';
 
   return (
     <section className="calculator-section section-divider">
@@ -42,7 +42,7 @@ export function CalculatorSection({ btcPrice }: CalculatorSectionProps) {
             />
           </div>
           <div className="calc-row">
-            <label>Investment Amount (EUR)</label>
+            <label>Investment Amount (€)</label>
             <input
               type="number"
               value={investment}

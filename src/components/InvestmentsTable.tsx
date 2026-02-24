@@ -44,7 +44,7 @@ export function InvestmentsTable({ rows, loading, error }: InvestmentsTableProps
             <tr>
               <th>Date</th>
               <th>BTC Amount</th>
-              <th>EUR Invested</th>
+              <th>€ Invested</th>
               <th>Purchase Price</th>
               <th>Current Value</th>
               <th>Commission</th>
@@ -60,12 +60,12 @@ export function InvestmentsTable({ rows, loading, error }: InvestmentsTableProps
                 <tr key={`${row.date}-${index}`}>
                   <td>{row.date}</td>
                   <td>{`${formatBtc(row.btcAmount)} BTC`}</td>
-                  <td>{`${formatMoney(row.eurAmount)} EUR`}</td>
-                  <td>{`${formatMoney(row.purchasePrice)} EUR`}</td>
-                  <td>{`${formatMoney(row.currentValue)} EUR`}</td>
+                  <td>{`${formatMoney(row.eurAmount)} €`}</td>
+                  <td>{`${formatMoney(row.purchasePrice)} €`}</td>
+                  <td>{`${formatMoney(row.currentValue)} €`}</td>
                   <td className="centered-text">{`${Math.round(row.commissionPct * 100)}%`}</td>
                   <td className={row.profitLoss >= 0 ? 'positive' : 'negative'}>
-                    {`${profitSign}${formatMoney(row.profitLoss)} EUR`}
+                    {`${profitSign}${formatMoney(row.profitLoss)} €`}
                   </td>
                   <td className="centered-text">{row.guaranteed ? '✅ Yes' : '❌ No'}</td>
                   <td>{row.guaranteeDate ?? '-'}</td>
