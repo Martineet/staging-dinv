@@ -25,7 +25,7 @@ export function SummarySection({ summary, btcPrice }: SummarySectionProps) {
 
   return (
     <section className="summary-section section-divider">
-      <h2 className="section-title large">📊 D.Inversions Portfolio</h2>
+      <h2 className="section-title large">📊 D.Inversions Community</h2>
       <div className="summary-grid">
         <div className="summary-card">
           <div className="summary-icon">₿</div>
