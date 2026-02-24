@@ -1,7 +1,7 @@
 'use client';
 
 import { useCalculator } from '@/hooks/useCalculator';
-import { formatMoney } from '@/lib/format';
+import { formatMoney, formatMoneyRounded } from '@/lib/format';
 
 type CalculatorSectionProps = {
   btcPrice: number;
@@ -19,7 +19,7 @@ export function CalculatorSection({ btcPrice }: CalculatorSectionProps) {
     handleFuturePriceChange
   } = useCalculator(btcPrice);
 
-  const displayCurrent = btcPrice ? `${formatMoney(btcPrice)} €` : '-- €';
+  const displayCurrent = btcPrice ? `${formatMoneyRounded(btcPrice)} €` : '-- €';
   const displayFinal = finalValue ? `${formatMoney(finalValue)} €` : '-- €';
 
   return (
@@ -69,3 +69,4 @@ export function CalculatorSection({ btcPrice }: CalculatorSectionProps) {
     </section>
   );
 }
+
