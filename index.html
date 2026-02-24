@@ -229,7 +229,7 @@
                 <div class="summary-card">
                     <div class="summary-icon">💵</div>
                     <div class="summary-value" id="summaryTheoreticalValue">-- €</div>
-                    <div class="summary-label">Real Time Value</div>
+                    <div class="summary-label">Community Value</div>
                 </div>
                 <div class="summary-card">
                     <div class="summary-icon">💰</div>
@@ -737,7 +737,7 @@ async function loadPortfolioSummary() {
     const totalVolume   = total_btc * currentBTCPrice;
     const portfolioResult = totalVolume - total_invested;
 
-    document.getElementById('summaryTotalBTC').textContent        = parseFloat(total_btc).toFixed(3) + ' BTC';
+    document.getElementById('summaryTotalBTC').textContent        = parseFloat(total_btc).toFixed(2) + ' BTC';
     document.getElementById('summaryBitcoiners').textContent      = bitcoiners;
     document.getElementById('summaryTheoreticalValue').textContent = Math.round(totalVolume).toLocaleString('de-DE') + ' €';
     document.getElementById('summaryTotalInvestment').textContent  = Math.round(total_invested).toLocaleString('de-DE') + ' €';
@@ -755,7 +755,7 @@ async function loadPortfolioSummary() {
 function updateCalculator() {
     const growthRate = parseFloat(document.getElementById('calcGrowthRate').value) || DEFAULT_GROWTH;
     const investment = parseFloat(document.getElementById('calcInvestment').value) || 0;
-    document.getElementById('calcCurrentPrice').value = currentBTCPrice.toLocaleString('de-DE') + ' €';
+    document.getElementById('calcCurrentPrice').value = currentBTCPrice.toLocaleString('de-DE', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' €';
     const futurePrice = currentBTCPrice * Math.pow(1 + growthRate / 100, 4);
     document.getElementById('calcFuturePrice').value  = futurePrice.toFixed(0);
     if (investment > 0 && currentBTCPrice > 0) {

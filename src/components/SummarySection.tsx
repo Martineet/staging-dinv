@@ -1,7 +1,7 @@
 'use client';
 
 import { PortfolioSummary } from '@/lib/types';
-import { formatBtc, formatMoneyRounded } from '@/lib/format';
+import { formatMoneyRounded } from '@/lib/format';
 
 type SummarySectionProps = {
   summary: PortfolioSummary | null;
@@ -18,6 +18,10 @@ export function SummarySection({ summary, btcPrice }: SummarySectionProps) {
   const portfolioResult = totalVolume - totalInvested;
   const resultSign = portfolioResult >= 0 ? '+' : '';
   const resultClass = portfolioResult >= 0 ? 'positive' : 'negative';
+  const totalBtcDisplay = totalBtc.toLocaleString('de-DE', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
 
   return (
     <section className="summary-section section-divider">
@@ -26,7 +30,7 @@ export function SummarySection({ summary, btcPrice }: SummarySectionProps) {
         <div className="summary-card">
           <div className="summary-icon">₿</div>
           <div className="summary-value">
-            {summary ? `${formatBtc(totalBtc)} BTC` : '-- BTC'}
+            {summary ? `${totalBtcDisplay} BTC` : '-- BTC'}
           </div>
           <div className="summary-label">Bitcoin Hodled</div>
         </div>
@@ -40,7 +44,7 @@ export function SummarySection({ summary, btcPrice }: SummarySectionProps) {
           <div className="summary-value">
             {summary ? `${formatMoneyRounded(totalVolume)} €` : '-- €'}
           </div>
-          <div className="summary-label">Real Time Value</div>
+          <div className="summary-label">Community Value</div>
         </div>
         <div className="summary-card">
           <div className="summary-icon">💰</div>
