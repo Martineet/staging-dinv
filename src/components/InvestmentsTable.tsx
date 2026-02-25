@@ -43,11 +43,13 @@ export function InvestmentsTable({ rows, loading, error }: InvestmentsTableProps
           <thead>
             <tr>
               <th>Date</th>
+              <th>Type</th>
               <th>BTC Amount</th>
               <th>€ Invested</th>
               <th>Purchase Price</th>
               <th>Current Value</th>
               <th>Profit/Loss</th>
+              <th>Notes</th>
             </tr>
           </thead>
           <tbody>
@@ -56,6 +58,7 @@ export function InvestmentsTable({ rows, loading, error }: InvestmentsTableProps
               return (
                 <tr key={`${row.date}-${index}`}>
                   <td>{row.date}</td>
+                  <td>{row.type}</td>
                   <td>{`${formatBtc(row.btcAmount)} BTC`}</td>
                   <td>{`${formatMoneyRounded(row.eurAmount)} €`}</td>
                   <td>{`${formatMoneyRounded(row.purchasePrice)} €`}</td>
@@ -63,6 +66,7 @@ export function InvestmentsTable({ rows, loading, error }: InvestmentsTableProps
                   <td className={row.profitLoss >= 0 ? 'positive' : 'negative'}>
                     {`${profitSign}${formatMoneyRounded(row.profitLoss)} €`}
                   </td>
+                  <td>{row.notes}</td>
                 </tr>
               );
             })}

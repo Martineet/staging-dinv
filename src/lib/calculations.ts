@@ -21,6 +21,8 @@ export function buildInvestmentRows(
 
     return {
       date: investment.date_swap,
+      type: investment.type ?? '-',
+      notes: investment.notes ?? '-',
       btcAmount,
       eurAmount,
       purchasePrice,
@@ -38,6 +40,7 @@ export function calculatePortfolioTotals(
   let totalBTC = 0;
   let totalFinalValue = 0;
   let totalTaxes = 0;
+  let onboardedDate: string | null = null;
 
   investments.forEach((investment) => {
     const btcAmount = toNumber(investment.btc_amount);
@@ -59,17 +62,24 @@ export function calculatePortfolioTotals(
     totalBTC += btcAmount;
     totalFinalValue += finalValue;
     totalTaxes += taxes;
+
+    if (!onboardedDate || investment.date_swap < onboardedDate) {
+      onboardedDate = investment.date_swap;
+    }
   });
 
   const totalCurrentValue = totalBTC * currentBtcPrice * PRICE_HAIRCUT;
+  const averagePurchasePrice = totalBTC > 0 ? totalInvested / totalBTC : 0;
   const totalProfitLoss = totalFinalValue - totalInvested;
 
   return {
     totalInvested,
     totalBTC,
+    averagePurchasePrice,
     totalCurrentValue,
     totalFinalValue,
     totalTaxes,
-    totalProfitLoss
+    totalProfitLoss,
+    onboardedDate
   };
 }
