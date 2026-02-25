@@ -90,9 +90,11 @@ export function DcaCalculatorSection({ btcPrice }: DcaCalculatorSectionProps) {
 
         <div className="calc-result">
           <div className="dca-row dca-row-eur">
-            <div className="result-label">Euros invested</div>
-            <div className="result-value result-value-normal">
-              {result ? `${formatMoneyRounded(result.investedEur)} ${EUR}` : `-- ${EUR}`}
+            <div className="dca-inline-line">
+              <span className="result-label dca-inline-label">Euros invested</span>
+              <span className="result-value result-value-normal dca-inline-value">
+                {result ? `${formatMoneyRounded(result.investedEur)} ${EUR}` : `-- ${EUR}`}
+              </span>
             </div>
           </div>
 

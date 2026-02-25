@@ -269,6 +269,21 @@ button:disabled {
   grid-template-columns: 1fr;
 }
 
+.dca-inline-line {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 10px;
+}
+
+.dca-inline-label {
+  margin-bottom: 0;
+}
+
+.dca-inline-value {
+  line-height: 1;
+}
+
 .dca-row-item {
   padding: 10px;
   border: 1px solid #2d3548;
@@ -723,6 +738,10 @@ tr:hover {
 
   .dca-row {
     grid-template-columns: 1fr;
+  }
+
+  .dca-inline-line {
+    flex-wrap: wrap;
   }
 
   .btc-logo {
