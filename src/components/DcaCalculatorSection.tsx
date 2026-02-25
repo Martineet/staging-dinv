@@ -29,7 +29,6 @@ export function DcaCalculatorSection({ btcPrice }: DcaCalculatorSectionProps) {
     loading,
     error,
     compareAsset,
-    lastStoredDate,
     setMonthlyEur,
     setStartDate,
     setEndDate,
@@ -131,19 +130,16 @@ export function DcaCalculatorSection({ btcPrice }: DcaCalculatorSectionProps) {
 
           <div className="result-label">
             {result
-              ? `Final valuation date: ${result.finalValuationDate}${
-                  result.usingLiveFinalPrice ? ' (live price)' : ' (stored monthly)'
-                }`
-              : 'Final valuation date: --'}
+              ? `${assetLabel(compareAsset)} reference price: ${formatMoneyRounded(
+                  result.compareFinalPrice
+                )} ${EUR} ${result.usingLiveFinalPrice ? '(live)' : '(stored monthly)'}`
+              : `${assetLabel(compareAsset)} reference price: -- ${EUR}`}
           </div>
 
           {loading && <div className="loading">Calculating DCA...</div>}
           {error && <div className="error centered-text">{error}</div>}
         </div>
       </div>
-      <p className="dca-last-stored">
-        <em>Last Stored Monthly date: {lastStoredDate ?? '--'}</em>
-      </p>
     </div>
   );
 }

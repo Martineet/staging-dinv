@@ -16,6 +16,7 @@ type DcaResult = {
   compareAsset: AssetKind;
   finalValuationDate: string;
   usingLiveFinalPrice: boolean;
+  compareFinalPrice: number;
 };
 
 function toIsoDate(date: Date): string {
@@ -30,6 +31,12 @@ function monthStartOfDate(date: Date): string {
   const year = date.getUTCFullYear();
   const month = `${date.getUTCMonth() + 1}`.padStart(2, '0');
   return `${year}-${month}-01`;
+}
+
+function defaultStartDateIso(todayIso: string): string {
+  const base = new Date(`${todayIso}T00:00:00Z`);
+  base.setUTCFullYear(base.getUTCFullYear() - 4);
+  return monthStartOfDate(base);
 }
 
 function nextMonthStart(dateIso: string): string {
@@ -76,15 +83,13 @@ function buildMonthlySchedule(startDate: string, endDate: string): string[] {
 
 export function useDcaCalculator(currentBtcPrice: number) {
   const [monthlyEur, setMonthlyEur] = useState<number | ''>('');
-  const [startDate, setStartDate] = useState('2018-01-12');
+  const today = useMemo(() => toIsoDate(new Date()), []);
+  const [startDate, setStartDate] = useState(() => defaultStartDateIso(today));
   const [endDate, setEndDate] = useState('');
   const [compareAsset, setCompareAsset] = useState<AssetKind>('gold');
   const [result, setResult] = useState<DcaResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [lastStoredDate, setLastStoredDate] = useState<string | null>(null);
-
-  const today = useMemo(() => toIsoDate(new Date()), []);
 
   useEffect(() => {
     const run = async () => {
@@ -107,7 +112,6 @@ export function useDcaCalculator(currentBtcPrice: number) {
         }
 
         const latestStored = monthlyRows[monthlyRows.length - 1].price_date;
-        setLastStoredDate(latestStored);
 
         const inputEnd = endDate || today;
         const usesLiveFinalPrice = !endDate || endDate === today || inputEnd > latestStored;
@@ -165,10 +169,20 @@ export function useDcaCalculator(currentBtcPrice: number) {
         let compareFinalPrice = 0;
 
         if (usesLiveFinalPrice) {
-          const currentCompare = await getCurrentComparisonAssetPrices();
-          if (compareAsset === 'gold') compareFinalPrice = currentCompare.goldEur;
-          if (compareAsset === 'sp500') compareFinalPrice = currentCompare.sp500Eur;
-          if (compareAsset === 'ibex35') compareFinalPrice = currentCompare.ibex35Eur;
+          try {
+            const currentCompare = await getCurrentComparisonAssetPrices();
+            if (compareAsset === 'gold') compareFinalPrice = currentCompare.goldEur;
+            if (compareAsset === 'sp500') compareFinalPrice = currentCompare.sp500Eur;
+            if (compareAsset === 'ibex35') compareFinalPrice = currentCompare.ibex35Eur;
+          } catch {
+            const fallbackRow = rowsByDate.get(latestStored);
+            if (!fallbackRow) {
+              setResult(null);
+              setError('Could not fetch live asset price and no stored fallback was found.');
+              return;
+            }
+            compareFinalPrice = getCompareAssetPrice(fallbackRow, compareAsset);
+          }
         } else {
           const finalRow = rowsByDate.get(effectiveEnd);
           if (!finalRow) {
@@ -202,7 +216,8 @@ export function useDcaCalculator(currentBtcPrice: number) {
           },
           compareAsset,
           finalValuationDate: usesLiveFinalPrice ? today : effectiveEnd,
-          usingLiveFinalPrice: usesLiveFinalPrice
+          usingLiveFinalPrice: usesLiveFinalPrice,
+          compareFinalPrice
         });
       } catch (err) {
         setResult(null);
@@ -224,7 +239,6 @@ export function useDcaCalculator(currentBtcPrice: number) {
     loading,
     error,
     compareAsset,
-    lastStoredDate,
     setMonthlyEur,
     setStartDate,
     setEndDate,
