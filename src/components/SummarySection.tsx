@@ -69,7 +69,7 @@ export function SummarySection({ summary, btcPrice }: SummarySectionProps) {
         </div>
         <div className="summary-card">
           <div className="summary-icon">{HOURGLASS}</div>
-          <div className="summary-value">2018-01-12</div>
+          <div className="summary-value">12/01/2018</div>
           <div className="summary-label">Journey started</div>
         </div>
       </div>

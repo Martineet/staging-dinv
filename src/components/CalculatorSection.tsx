@@ -9,7 +9,7 @@ type CalculatorSectionProps = {
 
 const EUR = '\u20AC';
 const MONEY_BAG = '\u{1F4B0}';
-const CALCULATOR = '\u{1F5A9}';
+const CALCULATOR = '\u{1F9EE}';
 
 export function CalculatorSection({ btcPrice }: CalculatorSectionProps) {
   const {
