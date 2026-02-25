@@ -110,19 +110,11 @@ export function useDcaCalculator(currentBtcPrice: number) {
         setLastStoredDate(latestStored);
 
         const inputEnd = endDate || today;
-        const usesLiveFinalPrice = !endDate || endDate === today;
+        const usesLiveFinalPrice = !endDate || endDate === today || inputEnd > latestStored;
 
         if (inputEnd < startDate) {
           setResult(null);
           setError('End date must be after start date.');
-          return;
-        }
-
-        if (inputEnd > latestStored && !usesLiveFinalPrice) {
-          setResult(null);
-          setError(
-            `Dates after ${latestStored} are not allowed. Use today (${today}) or leave end date empty.`
-          );
           return;
         }
 

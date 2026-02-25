@@ -8,6 +8,7 @@ type CalculatorSectionProps = {
 };
 
 const EUR = '\u20AC';
+const MONEY_BAG = '\u{1F4B0}';
 
 export function CalculatorSection({ btcPrice }: CalculatorSectionProps) {
   const {
@@ -26,7 +27,7 @@ export function CalculatorSection({ btcPrice }: CalculatorSectionProps) {
 
   return (
     <div className="calculator-panel">
-      <h2 className="section-title large">Bitcoin Investment Calculator</h2>
+      <h2 className="section-title large">{`${MONEY_BAG} Bitcoin Investment Calculator`}</h2>
       <div className="calculator-card">
         <div className="calc-grid">
           <div className="calc-row">

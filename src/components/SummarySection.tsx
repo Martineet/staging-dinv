@@ -12,7 +12,7 @@ const EUR = '\u20AC';
 const HOURGLASS = '\u23F3';
 const COIN = '\u20BF';
 const USERS = '\u{1F465}';
-const CHART = '\u{1F4CA}';
+const EURO_BANKNOTE = '\u{1F4B6}';
 const MONEY_BAG = '\u{1F4B0}';
 const TREND = '\u{1F4C8}';
 
@@ -47,7 +47,7 @@ export function SummarySection({ summary, btcPrice }: SummarySectionProps) {
           <div className="summary-label">Bitcoiners</div>
         </div>
         <div className="summary-card">
-          <div className="summary-icon">{CHART}</div>
+          <div className="summary-icon">{EURO_BANKNOTE}</div>
           <div className="summary-value">
             {summary ? `${formatMoneyRounded(totalVolume)} ${EUR}` : `-- ${EUR}`}
           </div>

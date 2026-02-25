@@ -9,6 +9,8 @@ type DcaCalculatorSectionProps = {
 };
 
 const EUR = '\u20AC';
+const DIAMOND = '\u{1F48E}';
+const HANDS = '\u{1F932}';
 
 function assetLabel(asset: AssetKind): string {
   if (asset === 'gold') return 'Gold';
@@ -41,7 +43,7 @@ export function DcaCalculatorSection({ btcPrice }: DcaCalculatorSectionProps) {
 
   return (
     <div className="calculator-panel">
-      <h2 className="section-title large">Bitcoin DCA Calculator</h2>
+      <h2 className="section-title large">{`${DIAMOND} Bitcoin DCA Calculator ${HANDS}`}</h2>
       <div className="calculator-card">
         <div className="calc-grid">
           <div className="calc-row">
