@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { LandingHeader } from '@/components/LandingHeader';
 import { LoginForm } from '@/components/LoginForm';
 import { SummarySection } from '@/components/SummarySection';
-import { CalculatorSection } from '@/components/CalculatorSection';
+import { CalculatorsSection } from '@/components/CalculatorsSection';
 import { Footer } from '@/components/Footer';
 import { Logos } from '@/components/Logos';
 import { useAuth } from '@/hooks/useAuth';
@@ -29,7 +29,7 @@ export default function HomePage() {
       <LandingHeader btcPrice={price} />
       <LoginForm />
       <SummarySection summary={summary} btcPrice={price} />
-      <CalculatorSection btcPrice={price} />
+      <CalculatorsSection btcPrice={price} />
       <Logos />
       <Footer />
     </div>

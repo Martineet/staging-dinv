@@ -44,3 +44,17 @@ export type PortfolioTotals = {
   totalProfitLoss: number;
   onboardedDate: string | null;
 };
+
+export type AssetKind = 'bitcoin' | 'gold' | 'sp500' | 'ibex35';
+
+export type AssetsDailyPrice = {
+  price_date: string;
+  btc_eur: number;
+  btc_source: string | null;
+  gold_eur: number;
+  gold_source: string | null;
+  sp500_eur: number;
+  sp500_source: string | null;
+  ibex35_eur: number;
+  ibex35_source: string | null;
+};

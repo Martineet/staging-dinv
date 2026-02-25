@@ -188,9 +188,19 @@ button:disabled {
   color: #9ca3af;
 }
 
-.calculator-section {
-  max-width: 500px;
+.calculators-section {
   margin: 0 auto 40px;
+}
+
+.calculators-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  align-items: start;
+}
+
+.calculator-panel {
+  width: 100%;
 }
 
 .calculator-card {
@@ -657,6 +667,10 @@ tr:hover {
   }
 
   .calc-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .calculators-grid {
     grid-template-columns: 1fr;
   }
 
