@@ -88,29 +88,43 @@ export function DcaCalculatorSection({ btcPrice }: DcaCalculatorSectionProps) {
         </div>
 
         <div className="calc-result">
-          <div className="result-label">Euros invested</div>
-          <div className="result-value">
-            {result ? `${formatMoneyRounded(result.investedEur)} ${EUR}` : `-- ${EUR}`}
+          <div className="dca-row dca-row-eur">
+            <div className="result-label">Euros invested</div>
+            <div className="result-value result-value-normal">
+              {result ? `${formatMoneyRounded(result.investedEur)} ${EUR}` : `-- ${EUR}`}
+            </div>
           </div>
 
-          <div className="result-label">Bitcoin value</div>
-          <div className="result-value">
-            {result ? `${formatMoneyRounded(result.bitcoin.eurosValue)} ${EUR}` : `-- ${EUR}`}
-          </div>
-          <div className={`result-label ${result ? btcClass : ''}`}>Bitcoin Profit/Loss</div>
-          <div className={`result-value ${result ? btcClass : ''}`}>
-            {result ? `${btcSign}${formatMoneyRounded(result.bitcoin.profitLoss)} ${EUR}` : `-- ${EUR}`}
+          <div className="dca-row dca-row-strong">
+            <div className="dca-row-item">
+              <div className="result-label">Bitcoin value</div>
+              <div className="result-value">
+                {result ? `${formatMoneyRounded(result.bitcoin.eurosValue)} ${EUR}` : `-- ${EUR}`}
+              </div>
+            </div>
+            <div className="dca-row-item">
+              <div className={`result-label ${result ? btcClass : ''}`}>Bitcoin Profit/Loss</div>
+              <div className={`result-value ${result ? btcClass : ''}`}>
+                {result ? `${btcSign}${formatMoneyRounded(result.bitcoin.profitLoss)} ${EUR}` : `-- ${EUR}`}
+              </div>
+            </div>
           </div>
 
-          <div className="result-label">{assetLabel(compareAsset)} value</div>
-          <div className="result-value">
-            {result ? `${formatMoneyRounded(result.compare.eurosValue)} ${EUR}` : `-- ${EUR}`}
-          </div>
-          <div className={`result-label ${result ? cmpClass : ''}`}>
-            {assetLabel(compareAsset)} Profit/Loss
-          </div>
-          <div className={`result-value ${result ? cmpClass : ''}`}>
-            {result ? `${cmpSign}${formatMoneyRounded(result.compare.profitLoss)} ${EUR}` : `-- ${EUR}`}
+          <div className="dca-row">
+            <div className="dca-row-item">
+              <div className="result-label">{assetLabel(compareAsset)} value</div>
+              <div className="result-value result-value-normal">
+                {result ? `${formatMoneyRounded(result.compare.eurosValue)} ${EUR}` : `-- ${EUR}`}
+              </div>
+            </div>
+            <div className="dca-row-item">
+              <div className={`result-label ${result ? cmpClass : ''}`}>
+                {assetLabel(compareAsset)} Profit/Loss
+              </div>
+              <div className={`result-value result-value-normal ${result ? cmpClass : ''}`}>
+                {result ? `${cmpSign}${formatMoneyRounded(result.compare.profitLoss)} ${EUR}` : `-- ${EUR}`}
+              </div>
+            </div>
           </div>
 
           <div className="result-label">
@@ -118,13 +132,16 @@ export function DcaCalculatorSection({ btcPrice }: DcaCalculatorSectionProps) {
               ? `Final valuation date: ${result.finalValuationDate}${
                   result.usingLiveFinalPrice ? ' (live price)' : ' (stored monthly)'
                 }`
-              : `Last stored monthly date: ${lastStoredDate ?? '--'}`}
+              : 'Final valuation date: --'}
           </div>
 
           {loading && <div className="loading">Calculating DCA...</div>}
           {error && <div className="error centered-text">{error}</div>}
         </div>
       </div>
+      <p className="dca-last-stored">
+        <em>Last Stored Monthly date: {lastStoredDate ?? '--'}</em>
+      </p>
     </div>
   );
 }

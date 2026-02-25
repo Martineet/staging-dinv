@@ -258,6 +258,29 @@ button:disabled {
   text-align: center;
 }
 
+.dca-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.dca-row-eur {
+  grid-template-columns: 1fr;
+}
+
+.dca-row-item {
+  padding: 10px;
+  border: 1px solid #2d3548;
+  border-radius: 10px;
+  background: rgba(10, 14, 39, 0.35);
+}
+
+.dca-row-strong .dca-row-item {
+  border-color: rgba(245, 158, 11, 0.55);
+  background: rgba(245, 158, 11, 0.08);
+}
+
 .result-label {
   color: #9ca3af;
   font-size: 13px;
@@ -270,6 +293,18 @@ button:disabled {
   color: #f59e0b;
   font-size: 32px;
   font-weight: 700;
+}
+
+.result-value-normal {
+  color: #ffffff;
+  font-size: 22px;
+}
+
+.dca-last-stored {
+  margin-top: 8px;
+  text-align: center;
+  color: #9ca3af;
+  font-size: 12px;
 }
 
 .summary-section {
@@ -680,6 +715,14 @@ tr:hover {
 
   .result-value {
     font-size: 24px;
+  }
+
+  .result-value-normal {
+    font-size: 18px;
+  }
+
+  .dca-row {
+    grid-template-columns: 1fr;
   }
 
   .btc-logo {

@@ -10,6 +10,11 @@ type SummarySectionProps = {
 
 const EUR = '\u20AC';
 const HOURGLASS = '\u23F3';
+const COIN = '\u20BF';
+const USERS = '\u{1F465}';
+const CHART = '\u{1F4CA}';
+const MONEY_BAG = '\u{1F4B0}';
+const TREND = '\u{1F4C8}';
 
 export function SummarySection({ summary, btcPrice }: SummarySectionProps) {
   const totalBtc = summary?.total_btc ?? 0;
@@ -30,33 +35,33 @@ export function SummarySection({ summary, btcPrice }: SummarySectionProps) {
       <h2 className="section-title large">D.Inversions Community</h2>
       <div className="summary-grid">
         <div className="summary-card">
-          <div className="summary-icon">BTC</div>
+          <div className="summary-icon">{COIN}</div>
           <div className="summary-value">
             {summary ? `${totalBtcDisplay} BTC` : '-- BTC'}
           </div>
           <div className="summary-label">Bitcoin Hodled</div>
         </div>
         <div className="summary-card">
-          <div className="summary-icon">Users</div>
+          <div className="summary-icon">{USERS}</div>
           <div className="summary-value">{summary ? bitcoiners : '--'}</div>
           <div className="summary-label">Bitcoiners</div>
         </div>
         <div className="summary-card">
-          <div className="summary-icon">Value</div>
+          <div className="summary-icon">{CHART}</div>
           <div className="summary-value">
             {summary ? `${formatMoneyRounded(totalVolume)} ${EUR}` : `-- ${EUR}`}
           </div>
           <div className="summary-label">Community Value</div>
         </div>
         <div className="summary-card">
-          <div className="summary-icon">Invested</div>
+          <div className="summary-icon">{MONEY_BAG}</div>
           <div className="summary-value">
             {summary ? `${formatMoneyRounded(totalInvested)} ${EUR}` : `-- ${EUR}`}
           </div>
           <div className="summary-label">Total Invested</div>
         </div>
         <div className="summary-card highlight">
-          <div className="summary-icon">Result</div>
+          <div className="summary-icon">{TREND}</div>
           <div className={`summary-value ${summary ? resultClass : ''}`}>
             {summary ? `${resultSign}${formatMoneyRounded(portfolioResult)} ${EUR}` : `-- ${EUR}`}
           </div>
