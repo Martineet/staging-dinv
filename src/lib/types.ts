@@ -28,9 +28,6 @@ export type InvestmentRow = {
   purchasePrice: number;
   currentValue: number;
   profitLoss: number;
-  commissionPct: number;
-  guaranteed: boolean;
-  guaranteeDate: string | null;
 };
 
 export type PortfolioTotals = {
@@ -38,8 +35,6 @@ export type PortfolioTotals = {
   totalBTC: number;
   totalCurrentValue: number;
   totalFinalValue: number;
-  totalCommissions: number;
   totalTaxes: number;
-  totalGuaranteed: number;
   totalProfitLoss: number;
 };

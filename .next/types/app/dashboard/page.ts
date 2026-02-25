@@ -1,4 +1,4 @@
-// File: C:\Users\Ismael\prod-dinv\src\app\dashboard\page.tsx
+// File: C:\Users\marti.castan\Documents\altres\D.Inversions\PgWeb\prod-dinv\src\app\dashboard\page.tsx
 import * as entry from '../../../../src/app/dashboard/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

@@ -59,7 +59,7 @@ export default function DashboardPage() {
         onChangePassword={() => setIsModalOpen(true)}
         onLogout={() => signOut()}
       />
-      <StatsGrid totals={totals} btcPrice={price} />
+      <StatsGrid totals={totals} />
       <InvestmentsTable rows={rows} loading={investmentsLoading} error={error} />
       <ChangePasswordModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       <Logos />
