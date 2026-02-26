@@ -7,6 +7,10 @@ type SettingsMenuProps = {
   onLogout: () => void;
 };
 
+const GEAR_ICON = '\u2699\uFE0F';
+const KEY_ICON = '\u{1F511}';
+const DOOR_ICON = '\u{1F6AA}';
+
 export function SettingsMenu({ onChangePassword, onLogout }: SettingsMenuProps) {
   const [open, setOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
@@ -32,7 +36,7 @@ export function SettingsMenu({ onChangePassword, onLogout }: SettingsMenuProps) 
         aria-label="Settings"
         onClick={() => setOpen((prev) => !prev)}
       >
-        ⚙️
+        {GEAR_ICON}
       </button>
       <div className={`settings-dropdown ${open ? 'open' : ''}`}>
         <button
@@ -43,7 +47,7 @@ export function SettingsMenu({ onChangePassword, onLogout }: SettingsMenuProps) 
             onChangePassword();
           }}
         >
-          🔑 Change Password
+          {`${KEY_ICON} Change Password`}
         </button>
         <div className="settings-divider" />
         <button
@@ -54,7 +58,7 @@ export function SettingsMenu({ onChangePassword, onLogout }: SettingsMenuProps) 
             onLogout();
           }}
         >
-          🚪 Logout
+          {`${DOOR_ICON} Logout`}
         </button>
       </div>
     </div>

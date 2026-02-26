@@ -6,6 +6,7 @@
 
 :root {
   color-scheme: dark;
+  --top-nav-height: 84px;
 }
 
 body {
@@ -13,7 +14,7 @@ body {
   background: #0a0e27;
   min-height: 100vh;
   color: #e5e7eb;
-  padding: 0;
+  padding: var(--top-nav-height) 0 0;
 }
 
 a {
@@ -48,7 +49,7 @@ a:hover {
 
 .landing-main {
   width: 100%;
-  padding: 112px 32px 40px;
+  padding: 28px 32px 40px;
   position: relative;
 }
 
@@ -88,6 +89,7 @@ h1 {
   color: #f59e0b;
   font-size: 2em;
   font-weight: 600;
+  line-height: 1;
   margin: 0;
 }
 
@@ -131,6 +133,11 @@ h1 {
   color: #ffffff;
   text-decoration: none;
   white-space: nowrap;
+  font-size: 2em;
+  line-height: 1;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
 }
 
 .nav-title-link:hover {
@@ -159,6 +166,11 @@ h1 {
 .section-divider {
   padding-top: 30px;
   border-top: 1px solid #2d3548;
+}
+
+.content-width {
+  width: min(1200px, 100%);
+  margin: 0 auto;
 }
 
 .section-title {
@@ -473,7 +485,7 @@ button:disabled {
 
 .header {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   margin-bottom: 40px;
   padding-bottom: 20px;
@@ -570,7 +582,7 @@ button:disabled {
   inset: 0;
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(4px);
-  z-index: 200;
+  z-index: 500;
   align-items: center;
   justify-content: center;
 }
@@ -693,6 +705,12 @@ button:disabled {
   border-radius: 12px;
   padding: 24px;
   overflow-x: auto;
+}
+
+.investments-shell {
+  width: min(1200px, 100%);
+  margin: 0 auto;
+  padding: 0 8px;
 }
 
 .investments-table h2 {
@@ -821,7 +839,7 @@ tr:hover {
   }
 
   .landing-main {
-    padding: 90px 16px 24px;
+    padding: 20px 16px 24px;
   }
 
   .landing-top-nav {
@@ -836,6 +854,10 @@ tr:hover {
   .members-zone-btn {
     padding: 8px 12px;
     font-size: 13px;
+  }
+
+  .nav-title-link {
+    font-size: 1.3em;
   }
 
   h1 {

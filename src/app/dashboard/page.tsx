@@ -1,8 +1,7 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import { ChangePasswordModal } from '@/components/ChangePasswordModal';
 import { DashboardHeader } from '@/components/DashboardHeader';
 import { Footer } from '@/components/Footer';
 import { InvestmentsTable } from '@/components/InvestmentsTable';
@@ -15,10 +14,9 @@ import { buildInvestmentRows, calculatePortfolioTotals } from '@/lib/calculation
 
 export default function DashboardPage() {
   const router = useRouter();
-  const { session, user, loading, signOut } = useAuth();
+  const { session, user, loading } = useAuth();
   const { price } = useBtcPrice();
   const { client, investments, loading: investmentsLoading, error, refresh } = useInvestments(user);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     if (!loading && !session) {
@@ -54,14 +52,9 @@ export default function DashboardPage() {
 
   return (
     <div className="container">
-      <DashboardHeader
-        displayName={displayName}
-        onChangePassword={() => setIsModalOpen(true)}
-        onLogout={() => signOut()}
-      />
+      <DashboardHeader displayName={displayName} />
       <StatsGrid totals={totals} />
       <InvestmentsTable rows={rows} loading={investmentsLoading} error={error} />
-      <ChangePasswordModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       <Logos />
       <Footer />
     </div>

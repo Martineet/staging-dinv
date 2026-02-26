@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { LandingHeader } from '@/components/LandingHeader';
 import { LoginForm } from '@/components/LoginForm';
 import { SummarySection } from '@/components/SummarySection';
 import { CalculatorsSection } from '@/components/CalculatorsSection';
@@ -33,6 +32,20 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
+    const shouldOpenFromRedirect = sessionStorage.getItem('open_members_zone') === '1';
+    if (shouldOpenFromRedirect) {
+      sessionStorage.removeItem('open_members_zone');
+      setIsLoginModalOpen(true);
+    }
+
+    const handleOpenMembersZone = () => setIsLoginModalOpen(true);
+    window.addEventListener('open-members-zone', handleOpenMembersZone);
+    return () => {
+      window.removeEventListener('open-members-zone', handleOpenMembersZone);
+    };
+  }, []);
+
+  useEffect(() => {
     if (!isLoginModalOpen) return;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
@@ -43,7 +56,6 @@ export default function HomePage() {
 
   return (
     <div className="landing-page">
-      <LandingHeader btcPrice={price} onOpenMembersZone={() => setIsLoginModalOpen(true)} />
       <main className="landing-main">
         <SummarySection summary={summary} btcPrice={price} />
         <CalculatorsSection btcPrice={price} />

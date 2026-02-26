@@ -10,9 +10,11 @@ type CalculatorsSectionProps = {
 export function CalculatorsSection({ btcPrice }: CalculatorsSectionProps) {
   return (
     <section className="calculators-section section-divider">
-      <div className="calculators-grid">
-        <CalculatorSection btcPrice={btcPrice} />
-        <DcaCalculatorSection btcPrice={btcPrice} />
+      <div className="content-width">
+        <div className="calculators-grid">
+          <CalculatorSection btcPrice={btcPrice} />
+          <DcaCalculatorSection btcPrice={btcPrice} />
+        </div>
       </div>
     </section>
   );

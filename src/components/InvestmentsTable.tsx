@@ -7,37 +7,23 @@ type InvestmentsTableProps = {
   error: string | null;
 };
 
+const EUR = '\u20AC';
+
 export function InvestmentsTable({ rows, loading, error }: InvestmentsTableProps) {
-  if (loading) {
-    return (
-      <div className="investments-table">
-        <h2>Your Investments</h2>
-        <div className="loading">Loading your investments...</div>
-      </div>
-    );
-  }
+  const renderTableBody = () => {
+    if (loading) {
+      return <div className="loading">Loading your investments...</div>;
+    }
 
-  if (error) {
-    return (
-      <div className="investments-table">
-        <h2>Your Investments</h2>
-        <p className="error centered-text">{error}</p>
-      </div>
-    );
-  }
+    if (error) {
+      return <p className="error centered-text">{error}</p>;
+    }
 
-  if (!rows.length) {
-    return (
-      <div className="investments-table">
-        <h2>Your Investments</h2>
-        <p className="muted centered-text">No investments yet.</p>
-      </div>
-    );
-  }
+    if (!rows.length) {
+      return <p className="muted centered-text">No investments yet.</p>;
+    }
 
-  return (
-    <div className="investments-table">
-      <h2>Your Investments</h2>
+    return (
       <div className="table-scroll">
         <table>
           <thead>
@@ -45,7 +31,7 @@ export function InvestmentsTable({ rows, loading, error }: InvestmentsTableProps
               <th>Date</th>
               <th>Type</th>
               <th>BTC Amount</th>
-              <th>€ Invested</th>
+              <th>{`${EUR} Invested`}</th>
               <th>Purchase Price</th>
               <th>Current Value</th>
               <th>Profit/Loss</th>
@@ -60,11 +46,11 @@ export function InvestmentsTable({ rows, loading, error }: InvestmentsTableProps
                   <td>{row.date}</td>
                   <td>{row.type}</td>
                   <td>{`${formatBtc(row.btcAmount)} BTC`}</td>
-                  <td>{`${formatMoneyRounded(row.eurAmount)} €`}</td>
-                  <td>{`${formatMoneyRounded(row.purchasePrice)} €`}</td>
-                  <td>{`${formatMoneyRounded(row.currentValue)} €`}</td>
+                  <td>{`${formatMoneyRounded(row.eurAmount)} ${EUR}`}</td>
+                  <td>{`${formatMoneyRounded(row.purchasePrice)} ${EUR}`}</td>
+                  <td>{`${formatMoneyRounded(row.currentValue)} ${EUR}`}</td>
                   <td className={row.profitLoss >= 0 ? 'positive' : 'negative'}>
-                    {`${profitSign}${formatMoneyRounded(row.profitLoss)} €`}
+                    {`${profitSign}${formatMoneyRounded(row.profitLoss)} ${EUR}`}
                   </td>
                   <td>{row.notes}</td>
                 </tr>
@@ -73,6 +59,15 @@ export function InvestmentsTable({ rows, loading, error }: InvestmentsTableProps
           </tbody>
         </table>
       </div>
-    </div>
+    );
+  };
+
+  return (
+    <section className="investments-shell">
+      <div className="investments-table">
+        <h2>Your Investments</h2>
+        {renderTableBody()}
+      </div>
+    </section>
   );
 }
