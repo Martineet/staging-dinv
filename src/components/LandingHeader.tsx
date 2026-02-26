@@ -32,12 +32,18 @@ export function LandingHeader() {
   return (
     <header className="landing-top-nav" role="banner">
       <div className="landing-top-nav-left">
+        <div className="nav-brand-logo" aria-hidden="true">
+          <img src="/log1.png" alt="" />
+        </div>
         <a href="https://www.dinversions.org/" className="header-title nav-title-link">
           D.Inversions
         </a>
         <div id="headerBtcPrice" className="header-btc-price">
           {displayPrice}
         </div>
+      </div>
+      <div className="landing-top-nav-middle">
+        <p className="nav-quote">Bitcoin is building the next global monetary system</p>
       </div>
       <div className="landing-top-nav-right">
         {isLoggedIn ? (

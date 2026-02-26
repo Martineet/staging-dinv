@@ -121,12 +121,49 @@ h1 {
   align-items: center;
   gap: 18px;
   min-width: 0;
+  flex: 1;
+}
+
+.landing-top-nav-middle {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  min-width: 0;
 }
 
 .landing-top-nav-right {
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  flex: 1;
+}
+
+.nav-brand-logo {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  flex: 0 0 auto;
+}
+
+.nav-brand-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.nav-quote {
+  color: #9ca3af;
+  font-size: 14px;
+  line-height: 1.2;
+  margin: 0;
+  padding: 0 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .nav-title-link {
@@ -856,8 +893,18 @@ tr:hover {
     font-size: 13px;
   }
 
+  .nav-brand-logo {
+    width: 28px;
+    height: 28px;
+  }
+
   .nav-title-link {
     font-size: 1.3em;
+  }
+
+  .nav-quote {
+    font-size: 11px;
+    padding: 0 6px;
   }
 
   h1 {
