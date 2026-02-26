@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { BtcHistoricalChart } from '@/components/BtcHistoricalChart';
 import { LoginForm } from '@/components/LoginForm';
 import { SummarySection } from '@/components/SummarySection';
 import { CalculatorsSection } from '@/components/CalculatorsSection';
@@ -57,6 +58,7 @@ export default function HomePage() {
   return (
     <div className="landing-page">
       <main className="landing-main">
+        <BtcHistoricalChart currentPrice={price} />
         <SummarySection summary={summary} btcPrice={price} />
         <CalculatorsSection btcPrice={price} />
         <Logos />

@@ -210,6 +210,29 @@ h1 {
   margin: 0 auto;
 }
 
+.historical-chart-section {
+  margin-bottom: 30px;
+}
+
+.historical-chart-card {
+  background: #0a0e27;
+  border: 1px solid #2d3548;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.historical-chart-canvas-wrap {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.historical-chart-canvas-wrap canvas {
+  display: block;
+  width: 100% !important;
+  height: auto !important;
+}
+
 .section-title {
   color: #ffffff;
   font-size: 1.1em;
@@ -929,6 +952,10 @@ tr:hover {
 
   .calculators-grid {
     grid-template-columns: 1fr;
+  }
+
+  .historical-chart-card {
+    padding: 14px;
   }
 
   .calculator-card {
