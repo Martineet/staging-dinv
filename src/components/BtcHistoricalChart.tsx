@@ -22,28 +22,21 @@ type BtcHistoricalChartProps = {
 };
 
 const EURO_FORMATTER = new Intl.NumberFormat('es-ES', { maximumFractionDigits: 0 });
-const MONTH_YEAR_FORMATTER = new Intl.DateTimeFormat('es-ES', { month: 'short', year: 'numeric' });
-const FULL_DATE_FORMATTER = new Intl.DateTimeFormat('es-ES', { day: '2-digit', month: 'short', year: 'numeric' });
+const DATE_FORMATTER = new Intl.DateTimeFormat('es-ES', { day: '2-digit', month: 'short', year: 'numeric' });
 
-const formatEuro = (value: number) => `${EURO_FORMATTER.format(Math.round(value))} €`;
-
-type ChartPoint = {
-  x: number;
-  y: number;
-};
+const formatEuro = (value: number) => `${EURO_FORMATTER.format(Math.round(value))} \u20AC`;
 
 export function BtcHistoricalChart({ currentPrice }: BtcHistoricalChartProps) {
   const { data: historicalData, loading, error } = useHistoricalBtcPrices();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const chartRef = useRef<Chart<'line'> | null>(null);
 
-  const chartPoints = useMemo<ChartPoint[]>(() => {
+  const chartPoints = useMemo(() => {
     const base = historicalData
       .map((point) => ({ x: new Date(point.date).getTime(), y: point.price }))
       .sort((a, b) => a.x - b.x);
 
-    const today = new Date();
-    const todayKey = today.toISOString().slice(0, 10);
+    const todayKey = new Date().toISOString().slice(0, 10);
     const todayTimestamp = new Date(todayKey).getTime();
     const hasToday = base.some((point) => point.x === todayTimestamp);
 
@@ -54,150 +47,96 @@ export function BtcHistoricalChart({ currentPrice }: BtcHistoricalChartProps) {
     return base.sort((a, b) => a.x - b.x);
   }, [historicalData, currentPrice]);
 
-  const visiblePoints = chartPoints;
-
   useEffect(() => {
-    if (!canvasRef.current || !visiblePoints.length) return;
+    if (!canvasRef.current || !chartPoints.length) return;
 
-    const yValues = visiblePoints.map((point) => point.y);
-    const yMin = Math.min(...yValues);
-    const yMax = Math.max(...yValues);
-    const yPadding = Math.max((yMax - yMin) * 0.08, 300);
-    const isMobile = window.matchMedia('(max-width: 600px)').matches;
-
-    if (!chartRef.current) {
-      const config: ChartConfiguration<'line'> = {
-        type: 'line',
-        data: {
-          datasets: [
-            {
-              data: visiblePoints,
-              borderColor: '#22c55e',
-              backgroundColor: '#22c55e',
-              borderWidth: 2,
-              fill: false,
-              tension: 0.2,
-              pointRadius: 0,
-              pointHoverRadius: 4,
-              pointHitRadius: 16
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: true,
-          aspectRatio: isMobile ? 1.35 : 2.1,
-          animation: false,
-          normalized: true,
-          interaction: {
-            mode: 'nearest',
-            intersect: false
-          },
-          plugins: {
-            legend: {
-              display: false
-            },
-            tooltip: {
-              callbacks: {
-                title: (items) => {
-                  const timestamp = items[0]?.parsed?.x;
-                  return timestamp ? FULL_DATE_FORMATTER.format(new Date(timestamp)) : '';
-                },
-                label: (ctx) => formatEuro(Number(ctx.parsed.y))
-              }
-            }
-          },
-          scales: {
-            x: {
-              type: 'time',
-              time: {
-                unit: 'month',
-                displayFormats: {
-                  month: 'MMM yyyy'
-                },
-                tooltipFormat: 'MMM yyyy'
-              },
-              ticks: {
-                autoSkip: true,
-                maxTicksLimit: isMobile ? 5 : 10,
-                color: '#9ca3af',
-                callback: (_, index) => {
-                  const point = visiblePoints[index];
-                  return point ? MONTH_YEAR_FORMATTER.format(new Date(point.x)) : '';
-                }
-              },
-              grid: {
-                color: 'rgba(45, 53, 72, 0.5)'
-              }
-            },
-            y: {
-              min: yMin - yPadding,
-              max: yMax + yPadding,
-              ticks: {
-                maxTicksLimit: isMobile ? 5 : 7,
-                color: '#9ca3af',
-                callback: (value) => formatEuro(Number(value))
-              },
-              grid: {
-                color: 'rgba(45, 53, 72, 0.5)'
-              }
-            }
-          }
-        }
-      };
-
-      chartRef.current = new Chart(canvasRef.current, config);
-      return;
+    if (chartRef.current) {
+      chartRef.current.destroy();
+      chartRef.current = null;
     }
 
-    const chart = chartRef.current;
-    chart.data.datasets[0].data = visiblePoints;
-    chart.options.scales = {
-      x: {
-        type: 'time',
-        time: {
-          unit: 'month',
-          displayFormats: { month: 'MMM yyyy' },
-          tooltipFormat: 'MMM yyyy'
+    const isMobile = window.matchMedia('(max-width: 600px)').matches;
+    const config: ChartConfiguration<'line'> = {
+      type: 'line',
+      data: {
+        datasets: [
+          {
+            data: chartPoints,
+            borderColor: '#22c55e',
+            backgroundColor: '#22c55e',
+            borderWidth: 2,
+            fill: false,
+            tension: 0.2,
+            pointRadius: isMobile ? 0 : 2,
+            pointHoverRadius: isMobile ? 0 : 4,
+            pointHitRadius: 14
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        aspectRatio: isMobile ? 1.4 : 2.2,
+        interaction: {
+          mode: 'nearest',
+          intersect: false
         },
-        ticks: {
-          autoSkip: true,
-          maxTicksLimit: isMobile ? 5 : 10,
-          color: '#9ca3af',
-          callback: (_, index) => {
-            const point = visiblePoints[index];
-            return point ? MONTH_YEAR_FORMATTER.format(new Date(point.x)) : '';
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            callbacks: {
+              title: (items) => {
+                const timestamp = items[0]?.parsed?.x;
+                return timestamp ? DATE_FORMATTER.format(new Date(timestamp)) : '';
+              },
+              label: (ctx) => formatEuro(Number(ctx.parsed.y))
+            }
           }
         },
-        grid: {
-          color: 'rgba(45, 53, 72, 0.5)'
-        }
-      },
-      y: {
-        min: yMin - yPadding,
-        max: yMax + yPadding,
-        ticks: {
-          maxTicksLimit: isMobile ? 5 : 7,
-          color: '#9ca3af',
-          callback: (value) => formatEuro(Number(value))
-        },
-        grid: {
-          color: 'rgba(45, 53, 72, 0.5)'
+        scales: {
+          x: {
+            type: 'time',
+            time: {
+              unit: 'month',
+              displayFormats: {
+                month: 'MMM yyyy'
+              },
+              tooltipFormat: 'MMM yyyy'
+            },
+            ticks: {
+              autoSkip: true,
+              maxTicksLimit: isMobile ? 5 : 10,
+              color: '#9ca3af'
+            },
+            grid: {
+              color: 'rgba(45, 53, 72, 0.5)'
+            }
+          },
+          y: {
+            ticks: {
+              maxTicksLimit: isMobile ? 5 : 8,
+              color: '#9ca3af',
+              callback: (value) => formatEuro(Number(value))
+            },
+            grid: {
+              color: 'rgba(45, 53, 72, 0.5)'
+            }
+          }
         }
       }
     };
-    chart.options.aspectRatio = isMobile ? 1.35 : 2.1;
-    chart.update('none');
-  }, [visiblePoints]);
 
-  useEffect(() => {
+    chartRef.current = new Chart(canvasRef.current, config);
+
     return () => {
       if (chartRef.current) {
         chartRef.current.destroy();
         chartRef.current = null;
       }
     };
-  }, []);
+  }, [chartPoints]);
 
   if (loading && !chartPoints.length) {
     return (

@@ -229,8 +229,8 @@ h1 {
 
 .historical-chart-canvas-wrap canvas {
   display: block;
-  width: 100% !important;
-  height: 360px !important;
+  width: 100%;
+  height: auto;
 }
 
 .section-title {
@@ -956,10 +956,6 @@ tr:hover {
 
   .historical-chart-card {
     padding: 14px;
-  }
-
-  .historical-chart-canvas-wrap canvas {
-    height: 260px !important;
   }
 
   .calculator-card {
