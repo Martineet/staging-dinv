@@ -67,8 +67,8 @@ export function BtcHistoricalChart({ currentPrice }: BtcHistoricalChartProps) {
             borderWidth: 2,
             fill: false,
             tension: 0.2,
-            pointRadius: isMobile ? 0 : 2,
-            pointHoverRadius: isMobile ? 0 : 4,
+            pointRadius: 0,
+            pointHoverRadius: 0,
             pointHitRadius: 14
           }
         ]
