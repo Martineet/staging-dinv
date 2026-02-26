@@ -56,7 +56,7 @@ export function LandingHeader() {
         </div>
       </div>
       <div className="landing-top-nav-middle">
-        <p className="nav-quote">Bitcoin is building the next global monetary system</p>
+        <p className="nav-quote">Bitcoin is building the next global monetary system, are you in or out?</p>
       </div>
       <div className="landing-top-nav-right">
         {isLoggedIn ? (
