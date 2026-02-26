@@ -16,7 +16,7 @@ export default function DashboardPage() {
   const router = useRouter();
   const { session, user, loading } = useAuth();
   const { price } = useBtcPrice();
-  const { client, investments, loading: investmentsLoading, error, refresh } = useInvestments(user);
+  const { member, investments, loading: investmentsLoading, error, refresh } = useInvestments(user);
 
   useEffect(() => {
     if (!loading && !session) {
@@ -48,7 +48,7 @@ export default function DashboardPage() {
     );
   }
 
-  const displayName = client?.display_name || user?.email || 'Investor';
+  const displayName = member?.display_name || user?.email || 'Investor';
 
   return (
     <div className="container">

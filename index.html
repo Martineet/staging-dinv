@@ -559,28 +559,28 @@ async function fetchBTCPrice() {
 async function loadDashboard(user) {
     await fetchBTCPrice();
 
-    // RLS ensures this query only returns rows where client_id matches the user.
-    // We join on clients table to get the client_id from the user's email.
-    const { data: clientData, error: clientError } = await sb
-        .from('clients')
-        .select('client_id, display_name')
+    // RLS ensures this query only returns rows where member_id matches the user.
+    // We join on members table to get the member_id from the user's email.
+    const { data: memberData, error: memberError } = await sb
+        .from('members')
+        .select('member_id, display_name')
         .eq('email', user.email)
         .single();
 
-    if (clientError || !clientData) {
+    if (memberError || !memberData) {
         document.getElementById('tableContent').innerHTML =
             '<p style="text-align:center; color:#ef4444;">Could not find your account. Contact the administrator.</p>';
-        console.error('Client lookup error:', clientError);
+        console.error('Member lookup error:', memberError);
         return;
     }
 
     // Show display name instead of email
-    document.getElementById('userName').textContent = clientData.display_name;
+    document.getElementById('userName').textContent = memberData.display_name;
 
     const { data: investments, error: invError } = await sb
         .from('investments')
         .select('*')
-        .eq('client_id', clientData.client_id)
+        .eq('member_id', memberData.member_id)
         .order('date_swap', { ascending: true });
 
     if (invError) {

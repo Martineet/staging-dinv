@@ -2,18 +2,18 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { User } from '@supabase/supabase-js';
-import { getClientProfileByEmail, getInvestmentsByClientId } from '@/services/portfolio';
-import { ClientProfile, Investment } from '@/lib/types';
+import { getInvestmentsByMemberId, getMemberProfileByEmail } from '@/services/portfolio';
+import { Investment, MemberProfile } from '@/lib/types';
 
 export function useInvestments(user: User | null) {
-  const [client, setClient] = useState<ClientProfile | null>(null);
+  const [member, setMember] = useState<MemberProfile | null>(null);
   const [investments, setInvestments] = useState<Investment[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const refresh = useCallback(async () => {
     if (!user?.email) {
-      setClient(null);
+      setMember(null);
       setInvestments([]);
       setLoading(false);
       setError(null);
@@ -23,22 +23,22 @@ export function useInvestments(user: User | null) {
     setLoading(true);
 
     try {
-      const clientProfile = await getClientProfileByEmail(user.email);
-      if (!clientProfile) {
+      const memberProfile = await getMemberProfileByEmail(user.email);
+      if (!memberProfile) {
         setError('Could not find your account. Contact the administrator.');
-        setClient(null);
+        setMember(null);
         setInvestments([]);
         setLoading(false);
         return;
       }
 
-      const data = await getInvestmentsByClientId(clientProfile.client_id);
-      setClient(clientProfile);
+      const data = await getInvestmentsByMemberId(memberProfile.member_id);
+      setMember(memberProfile);
       setInvestments(data);
       setError(null);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error loading investments.');
-      setClient(null);
+      setMember(null);
       setInvestments([]);
     } finally {
       setLoading(false);
@@ -59,5 +59,5 @@ export function useInvestments(user: User | null) {
     };
   }, [refresh]);
 
-  return { client, investments, loading, error, refresh };
+  return { member, investments, loading, error, refresh };
 }

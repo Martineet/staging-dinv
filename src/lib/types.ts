@@ -10,8 +10,8 @@ export type Investment = {
   date_swap: string;
 };
 
-export type ClientProfile = {
-  client_id: string;
+export type MemberProfile = {
+  member_id: string;
   display_name: string | null;
   email: string;
 };
