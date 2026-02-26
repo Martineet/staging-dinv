@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { LandingHeader } from '@/components/LandingHeader';
 import { LoginForm } from '@/components/LoginForm';
@@ -17,6 +17,7 @@ export default function HomePage() {
   const { session, loading } = useAuth();
   const { price } = useBtcPrice();
   const { summary } = usePortfolioSummary();
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
   useEffect(() => {
     if (!loading && session) {
@@ -24,14 +25,51 @@ export default function HomePage() {
     }
   }, [loading, session, router]);
 
+  useEffect(() => {
+    document.body.classList.add('landing-body');
+    return () => {
+      document.body.classList.remove('landing-body');
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isLoginModalOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [isLoginModalOpen]);
+
   return (
-    <div className="container">
-      <LandingHeader btcPrice={price} />
-      <LoginForm />
-      <SummarySection summary={summary} btcPrice={price} />
-      <CalculatorsSection btcPrice={price} />
-      <Logos />
-      <Footer />
+    <div className="landing-page">
+      <LandingHeader btcPrice={price} onOpenMembersZone={() => setIsLoginModalOpen(true)} />
+      <main className="landing-main">
+        <SummarySection summary={summary} btcPrice={price} />
+        <CalculatorsSection btcPrice={price} />
+        <Logos />
+        <Footer />
+      </main>
+
+      {isLoginModalOpen ? (
+        <div
+          className="modal-overlay open"
+          role="presentation"
+          onClick={(event) => event.currentTarget === event.target && setIsLoginModalOpen(false)}
+        >
+          <section className="modal login-modal" role="dialog" aria-modal="true" aria-label="Member login">
+            <button
+              type="button"
+              className="modal-close-btn"
+              aria-label="Close login popup"
+              onClick={() => setIsLoginModalOpen(false)}
+            >
+              &times;
+            </button>
+            <LoginForm />
+          </section>
+        </div>
+      ) : null}
     </div>
   );
 }

@@ -4,26 +4,34 @@ import { formatMoneyRounded } from '@/lib/format';
 
 type LandingHeaderProps = {
   btcPrice: number;
+  onOpenMembersZone: () => void;
 };
 
 const EUR = '\u20AC';
-const COIN = '\u{1FA99}';
 
-export function LandingHeader({ btcPrice }: LandingHeaderProps) {
+export function LandingHeader({ btcPrice, onOpenMembersZone }: LandingHeaderProps) {
   const displayPrice = btcPrice ? `${formatMoneyRounded(btcPrice)} ${EUR}` : `-- ${EUR}`;
 
   return (
-    <div className="login-header">
-      <div className="login-header-row">
-        <h1 className="header-title">{`${COIN} D.Inversions`}</h1>
+    <header className="landing-top-nav">
+      <div className="landing-top-nav-left">
+        <a
+          href="https://www.dinversions.org/"
+          target="_blank"
+          rel="noreferrer"
+          className="header-title nav-title-link"
+        >
+          D.Inversions
+        </a>
         <div id="headerBtcPrice" className="header-btc-price">
           {displayPrice}
         </div>
       </div>
-      <div className="login-subtitle-row">
-        <p className="subtitle">Track your Bitcoin investments</p>
-        <p className="subtitle subtitle-right">Bitcoin price</p>
+      <div className="landing-top-nav-right">
+        <button type="button" className="members-zone-btn" onClick={onOpenMembersZone}>
+          Members Zone
+        </button>
       </div>
-    </div>
+    </header>
   );
 }

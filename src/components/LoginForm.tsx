@@ -3,6 +3,8 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 
+const LOCK_ICON = '\u{1F510}';
+
 export function LoginForm() {
   const { signIn } = useAuth();
   const [email, setEmail] = useState('');
@@ -10,6 +12,7 @@ export function LoginForm() {
   const [error, setError] = useState('');
   const [info, setInfo] = useState('');
   const [loading, setLoading] = useState(false);
+  const [signupText, setSignupText] = useState('\u2192 Sign up');
 
   useEffect(() => {
     const changed = sessionStorage.getItem('pw_changed');
@@ -35,7 +38,7 @@ export function LoginForm() {
 
   return (
     <div className="login-form-wrapper">
-      <h2 className="section-title">🔐 Member Login</h2>
+      <h2 className="section-title">{`${LOCK_ICON} Member Login`}</h2>
       <form className="login-form" onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="email">Email</label>
@@ -63,6 +66,13 @@ export function LoginForm() {
         </div>
         <button type="submit" disabled={loading}>
           {loading ? 'Logging in...' : 'Login'}
+        </button>
+        <button
+          type="button"
+          className="signup-placeholder-btn"
+          onClick={() => setSignupText('\u2192 Work in progress')}
+        >
+          {signupText}
         </button>
         {error ? <div className="error">{error}</div> : null}
         {info ? <div className="info-msg">{info}</div> : null}
