@@ -504,20 +504,20 @@ button:disabled {
 
 .settings-btn {
   width: auto;
-  padding: 8px 12px;
+  padding: 10px 14px;
   background: transparent;
-  border: 1px solid #2d3548;
+  border: 1px solid #f59e0b;
   border-radius: 10px;
   font-size: 14px;
   line-height: 1;
   cursor: pointer;
   transition: all 0.2s;
-  color: #e5e7eb;
+  color: #f59e0b;
 }
 
 .settings-btn:hover {
-  border-color: #f59e0b;
-  background: rgba(245, 158, 11, 0.08);
+  background: rgba(245, 158, 11, 0.12);
+  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.12);
   transform: none;
 }
 
