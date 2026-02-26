@@ -230,7 +230,16 @@ h1 {
 .historical-chart-canvas-wrap canvas {
   display: block;
   width: 100% !important;
-  height: auto !important;
+  height: 360px !important;
+}
+
+.historical-chart-scroll {
+  margin-top: 12px;
+}
+
+.historical-chart-scroll input[type='range'] {
+  width: 100%;
+  accent-color: #22c55e;
 }
 
 .section-title {
@@ -956,6 +965,10 @@ tr:hover {
 
   .historical-chart-card {
     padding: 14px;
+  }
+
+  .historical-chart-canvas-wrap canvas {
+    height: 260px !important;
   }
 
   .calculator-card {
