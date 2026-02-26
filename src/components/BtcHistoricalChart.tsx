@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import {
   Chart,
   type ChartConfiguration,
@@ -21,7 +21,6 @@ type BtcHistoricalChartProps = {
   currentPrice: number;
 };
 
-const TEN_YEARS_IN_MONTHS = 120;
 const EURO_FORMATTER = new Intl.NumberFormat('es-ES', { maximumFractionDigits: 0 });
 const MONTH_YEAR_FORMATTER = new Intl.DateTimeFormat('es-ES', { month: 'short', year: 'numeric' });
 const FULL_DATE_FORMATTER = new Intl.DateTimeFormat('es-ES', { day: '2-digit', month: 'short', year: 'numeric' });
@@ -37,7 +36,6 @@ export function BtcHistoricalChart({ currentPrice }: BtcHistoricalChartProps) {
   const { data: historicalData, loading, error } = useHistoricalBtcPrices();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const chartRef = useRef<Chart<'line'> | null>(null);
-  const [windowStart, setWindowStart] = useState(0);
 
   const chartPoints = useMemo<ChartPoint[]>(() => {
     const base = historicalData
@@ -56,17 +54,7 @@ export function BtcHistoricalChart({ currentPrice }: BtcHistoricalChartProps) {
     return base.sort((a, b) => a.x - b.x);
   }, [historicalData, currentPrice]);
 
-  const windowSize = Math.min(TEN_YEARS_IN_MONTHS, chartPoints.length);
-  const maxStart = Math.max(0, chartPoints.length - windowSize);
-
-  useEffect(() => {
-    setWindowStart(maxStart);
-  }, [maxStart]);
-
-  const visiblePoints = useMemo(
-    () => chartPoints.slice(windowStart, windowStart + windowSize),
-    [chartPoints, windowStart, windowSize]
-  );
+  const visiblePoints = chartPoints;
 
   useEffect(() => {
     if (!canvasRef.current || !visiblePoints.length) return;
@@ -242,19 +230,6 @@ export function BtcHistoricalChart({ currentPrice }: BtcHistoricalChartProps) {
           <div className="historical-chart-canvas-wrap">
             <canvas ref={canvasRef} aria-label="Bitcoin historical price chart" role="img" />
           </div>
-          {maxStart > 0 ? (
-            <div className="historical-chart-scroll">
-              <input
-                type="range"
-                min={0}
-                max={maxStart}
-                value={windowStart}
-                step={1}
-                aria-label="Scroll historical range"
-                onChange={(event) => setWindowStart(Number(event.target.value))}
-              />
-            </div>
-          ) : null}
         </div>
       </div>
     </section>

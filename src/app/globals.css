@@ -233,15 +233,6 @@ h1 {
   height: 360px !important;
 }
 
-.historical-chart-scroll {
-  margin-top: 12px;
-}
-
-.historical-chart-scroll input[type='range'] {
-  width: 100%;
-  accent-color: #22c55e;
-}
-
 .section-title {
   color: #ffffff;
   font-size: 1.1em;
