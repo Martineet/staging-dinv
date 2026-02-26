@@ -15,6 +15,7 @@ const USERS = '\u{1F465}';
 const EURO_BANKNOTE = '\u{1F4B6}';
 const MONEY_BAG = '\u{1F4B0}';
 const TREND = '\u{1F4C8}';
+const CHART = '\u{1F4CA}';
 
 export function SummarySection({ summary, btcPrice }: SummarySectionProps) {
   const totalBtc = summary?.total_btc ?? 0;
@@ -32,7 +33,7 @@ export function SummarySection({ summary, btcPrice }: SummarySectionProps) {
 
   return (
     <section className="summary-section section-divider">
-      <h2 className="section-title large">D.Inversions Community</h2>
+      <h2 className="section-title large">{CHART} D.Inversions Community</h2>
       <div className="summary-grid">
         <div className="summary-card">
           <div className="summary-icon">{COIN}</div>

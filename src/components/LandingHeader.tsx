@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, type MouseEvent } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { ChangePasswordModal } from '@/components/ChangePasswordModal';
 import { SettingsMenu } from '@/components/SettingsMenu';
@@ -29,13 +29,26 @@ export function LandingHeader() {
     window.dispatchEvent(new CustomEvent('open-members-zone'));
   };
 
+  const handleBrandClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    const targetPath = isLoggedIn ? '/dashboard' : '/';
+
+    if (pathname !== targetPath) {
+      router.push(targetPath);
+    }
+  };
+
   return (
     <header className="landing-top-nav" role="banner">
       <div className="landing-top-nav-left">
         <div className="nav-brand-logo" aria-hidden="true">
           <img src="/log1.png" alt="" />
         </div>
-        <a href="https://www.dinversions.org/" className="header-title nav-title-link">
+        <a
+          href={isLoggedIn ? '/dashboard' : '/'}
+          className="header-title nav-title-link"
+          onClick={handleBrandClick}
+        >
           D.Inversions
         </a>
         <div id="headerBtcPrice" className="header-btc-price">
