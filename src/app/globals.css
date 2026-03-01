@@ -200,6 +200,10 @@ h1 {
   transform: none;
 }
 
+.members-zone-label-mobile {
+  display: none;
+}
+
 .section-divider {
   padding-top: 30px;
   border-top: 1px solid #2d3548;
@@ -911,9 +915,25 @@ tr:hover {
     gap: 10px;
   }
 
+  .landing-top-nav-middle {
+    display: none;
+  }
+
+  .landing-top-nav-right {
+    flex: 0 0 auto;
+  }
+
   .members-zone-btn {
     padding: 8px 12px;
     font-size: 13px;
+  }
+
+  .members-zone-label-full {
+    display: none;
+  }
+
+  .members-zone-label-mobile {
+    display: inline;
   }
 
   .nav-brand-logo {
@@ -936,6 +956,7 @@ tr:hover {
 
   .header-btc-price {
     font-size: 1.3em;
+    white-space: nowrap;
   }
 
   .stats-grid {

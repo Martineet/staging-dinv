@@ -69,7 +69,8 @@ export function LandingHeader() {
           </>
         ) : (
           <button type="button" className="members-zone-btn" onClick={openMembersZone}>
-            Members Zone
+            <span className="members-zone-label-full">Members Zone</span>
+            <span className="members-zone-label-mobile">MZ</span>
           </button>
         )}
       </div>
