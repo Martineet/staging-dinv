@@ -153,3 +153,4 @@ price_date,btc_eur,btc_source,gold_eur,gold_source,sp500_eur,sp500_source,ibex35
 2025-12-01,74590.40000000,stooq:btceur,3645.09251602,stooq:xauusd/eurusd,5868.50492730,stooq:^spx/eurusd,16389.00000000,stooq:^ibex
 2026-01-01,74598.90000000,stooq:btceur,3676.67867086,stooq:xauusd/eurusd,5827.99104368,stooq:^spx/eurusd,17307.80000000,stooq:^ibex
 2026-02-01,70732.90000000,stooq:btceur,4089.85607505,stooq:xauusd/eurusd,5854.04187828,stooq:^spx/eurusd,17880.90000000,stooq:^ibex
+2026-03-01,55510.70000000,stooq:btceur,4454.86590103,stooq:xauusd/eurusd,5821.71480801,stooq:^spx/eurusd,18360.80000000,stooq:^ibex

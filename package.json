@@ -7,7 +7,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "assets:seed:update": "node database/update_assets_seed_cli.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.0.0",
