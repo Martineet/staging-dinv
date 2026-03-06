@@ -23,7 +23,7 @@ export function useInvestments(user: User | null) {
   }, [selectedPortfolioId]);
 
   const refresh = useCallback(async (portfolioIdOverride?: string | null) => {
-    if (!user) {
+    if (!user?.email) {
       setMember(null);
       setPortfolios([]);
       setSelectedPortfolioId(null);
@@ -36,8 +36,18 @@ export function useInvestments(user: User | null) {
     setLoading(true);
 
     try {
-      const memberProfile = user.email ? await getMemberProfileByEmail(user.email) : null;
-      const memberPortfolios = await getPortfoliosByMemberId(user.id);
+      const memberProfile = await getMemberProfileByEmail(user.email);
+      if (!memberProfile) {
+        setError('Could not find your account. Contact the administrator.');
+        setMember(null);
+        setPortfolios([]);
+        setSelectedPortfolioId(null);
+        setInvestments([]);
+        setLoading(false);
+        return;
+      }
+
+      const memberPortfolios = await getPortfoliosByMemberId(memberProfile.member_id);
       const nextSelectedPortfolioId =
         portfolioIdOverride ??
         (selectedPortfolioIdRef.current &&
