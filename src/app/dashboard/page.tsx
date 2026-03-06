@@ -16,7 +16,16 @@ export default function DashboardPage() {
   const router = useRouter();
   const { session, user, loading } = useAuth();
   const { price } = useBtcPrice();
-  const { member, investments, loading: investmentsLoading, error, refresh } = useInvestments(user);
+  const {
+    member,
+    portfolios,
+    selectedPortfolioId,
+    investments,
+    loading: investmentsLoading,
+    error,
+    refresh,
+    selectPortfolio
+  } = useInvestments(user);
 
   useEffect(() => {
     if (!loading && !session) {
@@ -40,6 +49,11 @@ export default function DashboardPage() {
     return buildInvestmentRows(investments, price);
   }, [investments, price]);
 
+  const selectedPortfolioName = useMemo(() => {
+    if (!selectedPortfolioId) return null;
+    return portfolios.find((portfolio) => portfolio.portfolio_id === selectedPortfolioId)?.name ?? null;
+  }, [portfolios, selectedPortfolioId]);
+
   if (loading) {
     return (
       <div className="container">
@@ -54,7 +68,15 @@ export default function DashboardPage() {
     <div className="container">
       <DashboardHeader displayName={displayName} />
       <StatsGrid totals={totals} />
-      <InvestmentsTable rows={rows} loading={investmentsLoading} error={error} />
+      <InvestmentsTable
+        rows={rows}
+        loading={investmentsLoading}
+        error={error}
+        portfolios={portfolios}
+        selectedPortfolioId={selectedPortfolioId}
+        selectedPortfolioName={selectedPortfolioName}
+        onSelectPortfolio={selectPortfolio}
+      />
       <Logos />
       <Footer />
     </div>

@@ -1,5 +1,6 @@
 export type Investment = {
   id?: string | number;
+  portfolio_id: string;
   btc_amount: number | string;
   eur_amount: number | string;
   purchase_price: number | string;
@@ -14,6 +15,12 @@ export type MemberProfile = {
   member_id: string;
   display_name: string | null;
   email: string;
+};
+
+export type Portfolio = {
+  portfolio_id: string;
+  member_id: string;
+  name: string;
 };
 
 export type PortfolioSummary = {

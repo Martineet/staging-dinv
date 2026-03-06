@@ -1,15 +1,27 @@
 import { formatBtc, formatMoneyRounded } from '@/lib/format';
-import { InvestmentRow } from '@/lib/types';
+import { InvestmentRow, Portfolio } from '@/lib/types';
 
 type InvestmentsTableProps = {
   rows: InvestmentRow[];
   loading: boolean;
   error: string | null;
+  portfolios: Portfolio[];
+  selectedPortfolioId: string | null;
+  selectedPortfolioName: string | null;
+  onSelectPortfolio: (portfolioId: string) => void;
 };
 
 const EUR = '\u20AC';
 
-export function InvestmentsTable({ rows, loading, error }: InvestmentsTableProps) {
+export function InvestmentsTable({
+  rows,
+  loading,
+  error,
+  portfolios,
+  selectedPortfolioId,
+  selectedPortfolioName,
+  onSelectPortfolio
+}: InvestmentsTableProps) {
   const renderTableBody = () => {
     if (loading) {
       return <div className="loading">Loading your investments...</div>;
@@ -17,6 +29,10 @@ export function InvestmentsTable({ rows, loading, error }: InvestmentsTableProps
 
     if (error) {
       return <p className="error centered-text">{error}</p>;
+    }
+
+    if (!portfolios.length) {
+      return <p className="muted centered-text">No portfolios created yet</p>;
     }
 
     if (!rows.length) {
@@ -65,7 +81,26 @@ export function InvestmentsTable({ rows, loading, error }: InvestmentsTableProps
   return (
     <section className="investments-shell">
       <div className="investments-table">
-        <h2>Your Investments</h2>
+        <div className="investments-header">
+          <h2>{selectedPortfolioName ?? 'Portfolio'}</h2>
+          <div className="portfolio-select-wrap">
+            <label htmlFor="portfolio-selector" className="portfolio-select-label">
+              Portfolio
+            </label>
+            <select
+              id="portfolio-selector"
+              value={selectedPortfolioId ?? ''}
+              onChange={(event) => onSelectPortfolio(event.target.value)}
+              disabled={loading || !portfolios.length}
+            >
+              {portfolios.map((portfolio) => (
+                <option key={portfolio.portfolio_id} value={portfolio.portfolio_id}>
+                  {portfolio.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
         {renderTableBody()}
       </div>
     </section>
