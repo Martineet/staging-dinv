@@ -86,6 +86,7 @@ export function InvestmentsTable({
           <div className="portfolio-select-wrap">
             <select
               id="portfolio-selector"
+              className="portfolio-selector"
               value={selectedPortfolioId ?? ''}
               onChange={(event) => onSelectPortfolio(event.target.value)}
               disabled={loading || !portfolios.length}

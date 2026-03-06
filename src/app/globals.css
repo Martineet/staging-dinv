@@ -796,6 +796,11 @@ button:disabled {
   min-width: 220px;
 }
 
+.portfolio-selector {
+  padding: 8px 12px;
+  font-size: 14px;
+}
+
 .table-scroll {
   width: 100%;
   overflow-x: auto;
