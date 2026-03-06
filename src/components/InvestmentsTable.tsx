@@ -84,9 +84,6 @@ export function InvestmentsTable({
         <div className="investments-header">
           <h2>{selectedPortfolioName ?? 'Portfolio'}</h2>
           <div className="portfolio-select-wrap">
-            <label htmlFor="portfolio-selector" className="portfolio-select-label">
-              Portfolio
-            </label>
             <select
               id="portfolio-selector"
               value={selectedPortfolioId ?? ''}

@@ -786,7 +786,7 @@ button:disabled {
 
 .investments-header {
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 16px;
   margin-bottom: 20px;
@@ -794,16 +794,6 @@ button:disabled {
 
 .portfolio-select-wrap {
   min-width: 220px;
-}
-
-.portfolio-select-label {
-  display: block;
-  margin-bottom: 6px;
-  color: #9ca3af;
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  font-weight: 600;
 }
 
 .table-scroll {
