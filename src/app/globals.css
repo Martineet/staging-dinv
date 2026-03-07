@@ -818,12 +818,40 @@ button:disabled {
 .table-actions {
   display: flex;
   gap: 8px;
+  align-items: center;
 }
 
 .btn-table {
   width: auto;
   padding: 8px 10px;
   font-size: 12px;
+}
+
+.icon-action {
+  width: auto;
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: #9ca3af;
+  line-height: 0;
+  cursor: pointer;
+}
+
+.icon-action:hover {
+  color: #f3f4f6;
+}
+
+.icon-action:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.icon-delete {
+  color: #ef4444;
+}
+
+.icon-delete:hover {
+  color: #f87171;
 }
 
 .btn-danger {

@@ -13,6 +13,7 @@ type MutationState = {
 type InvestmentDraft = {
   asset: string;
   amount: string;
+  eurAmount: string;
   price: string;
   date: string;
 };
@@ -20,6 +21,7 @@ type InvestmentDraft = {
 type DraftErrors = {
   asset?: string;
   amount?: string;
+  eurAmount?: string;
   price?: string;
   date?: string;
 };
@@ -53,11 +55,29 @@ type InvestmentsTableProps = {
 const EUR = '\u20AC';
 
 const EMPTY_DRAFT: InvestmentDraft = {
-  asset: '',
+  asset: 'buy',
   amount: '',
+  eurAmount: '',
   price: '',
   date: ''
 };
+
+const TRANSFER_TYPES = new Set(['transfer-in', 'transfer-out']);
+const TRANSACTION_TYPES = ['buy', 'sell', 'transfer-in', 'transfer-out'] as const;
+
+function normalizeTransactionType(value: string | null | undefined): string {
+  const normalized = (value ?? '').trim().toLowerCase();
+  return TRANSACTION_TYPES.includes(normalized as (typeof TRANSACTION_TYPES)[number]) ? normalized : 'buy';
+}
+
+function isTransferType(value: string): boolean {
+  return TRANSFER_TYPES.has(value);
+}
+
+function eurAmountLabel(value: string): string {
+  if (value === 'sell') return `Money earned (${EUR})`;
+  return `Money spent (${EUR})`;
+}
 
 function isValidDate(value: string): boolean {
   if (!value) return false;
@@ -73,10 +93,12 @@ function isValidDate(value: string): boolean {
 function validateDraft(draft: InvestmentDraft): DraftErrors {
   const errors: DraftErrors = {};
   const amount = Number(draft.amount);
+  const eurAmount = Number(draft.eurAmount);
   const price = Number(draft.price);
+  const transfer = isTransferType(draft.asset);
 
   if (!draft.asset.trim()) {
-    errors.asset = 'Asset is required';
+    errors.asset = 'Type is required';
   }
 
   if (!draft.amount.trim()) {
@@ -85,7 +107,19 @@ function validateDraft(draft: InvestmentDraft): DraftErrors {
     errors.amount = 'Amount must be greater than 0';
   }
 
-  if (!draft.price.trim()) {
+  if (!transfer) {
+    if (!draft.eurAmount.trim()) {
+      errors.eurAmount = 'EUR amount is required';
+    } else if (!Number.isFinite(eurAmount) || eurAmount <= 0) {
+      errors.eurAmount = 'EUR amount must be greater than 0';
+    }
+  }
+
+  if (transfer) {
+    if (draft.price.trim() && (!Number.isFinite(price) || price < 0)) {
+      errors.price = 'Price cannot be negative';
+    }
+  } else if (!draft.price.trim()) {
     errors.price = 'Price is required';
   } else if (!Number.isFinite(price) || price <= 0) {
     errors.price = 'Price must be greater than 0';
@@ -102,8 +136,9 @@ function validateDraft(draft: InvestmentDraft): DraftErrors {
 
 function mapInvestmentToDraft(investment: Investment): InvestmentDraft {
   return {
-    asset: investment.type ?? '',
+    asset: normalizeTransactionType(investment.type),
     amount: String(investment.btc_amount ?? ''),
+    eurAmount: String(investment.eur_amount ?? ''),
     price: String(investment.purchase_price ?? ''),
     date: investment.date_swap?.slice(0, 10) ?? ''
   };
@@ -143,6 +178,7 @@ export function InvestmentsTable({
   const [editingInvestmentId, setEditingInvestmentId] = useState<string | null>(null);
   const [draft, setDraft] = useState<InvestmentDraft>(EMPTY_DRAFT);
   const [draftErrors, setDraftErrors] = useState<DraftErrors>({});
+  const [isPriceManuallyEdited, setIsPriceManuallyEdited] = useState(false);
   const [isPortfolioManagerOpen, setIsPortfolioManagerOpen] = useState(false);
   const [newPortfolioName, setNewPortfolioName] = useState('');
   const [renamePortfolioName, setRenamePortfolioName] = useState('');
@@ -177,6 +213,7 @@ export function InvestmentsTable({
     setEditingInvestmentId(null);
     setDraft(EMPTY_DRAFT);
     setDraftErrors({});
+    setIsPriceManuallyEdited(false);
     setIsTransactionModalOpen(true);
   };
 
@@ -188,6 +225,7 @@ export function InvestmentsTable({
     setEditingInvestmentId(investmentId);
     setDraft(mapInvestmentToDraft(investment));
     setDraftErrors({});
+    setIsPriceManuallyEdited(false);
     setIsTransactionModalOpen(true);
   };
 
@@ -196,7 +234,28 @@ export function InvestmentsTable({
     setEditingInvestmentId(null);
     setDraft(EMPTY_DRAFT);
     setDraftErrors({});
+    setIsPriceManuallyEdited(false);
   };
+
+  const showEurAmount = !isTransferType(draft.asset);
+
+  useEffect(() => {
+    if (!showEurAmount || isPriceManuallyEdited) return;
+
+    const amount = Number(draft.amount);
+    const eurAmount = Number(draft.eurAmount);
+
+    if (!Number.isFinite(amount) || amount <= 0 || !Number.isFinite(eurAmount) || eurAmount <= 0) return;
+
+    const calculatedPrice = eurAmount / amount;
+    if (!Number.isFinite(calculatedPrice)) return;
+
+    setDraft((prev) => {
+      const nextPrice = String(calculatedPrice);
+      if (prev.price === nextPrice) return prev;
+      return { ...prev, price: nextPrice };
+    });
+  }, [draft.amount, draft.eurAmount, isPriceManuallyEdited, showEurAmount]);
 
   const handleTransactionSubmit = async () => {
     const validationErrors = validateDraft(draft);
@@ -206,11 +265,16 @@ export function InvestmentsTable({
       return;
     }
 
+    const isTransfer = isTransferType(draft.asset);
+    const finalPrice = isTransfer ? 0 : Number(draft.price);
+    const finalEurAmount = isTransfer ? 0 : Number(draft.eurAmount);
+
     const payload = {
       portfolio_id: selectedPortfolioId ?? undefined,
       asset: draft.asset.trim(),
       amount: Number(draft.amount),
-      price: Number(draft.price),
+      eur_amount: finalEurAmount,
+      price: finalPrice,
       date: draft.date
     };
 
@@ -316,18 +380,32 @@ export function InvestmentsTable({
                     <div className="table-actions">
                       <button
                         type="button"
-                        className="btn-table btn-secondary"
+                        className="icon-action icon-edit"
                         onClick={() => openEditTransactionModal(row.id)}
+                        title="Edit transaction"
+                        aria-label="Edit transaction"
                       >
-                        Edit
+                        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+                          <path
+                            d="M4 20h4l10-10-4-4L4 16v4Zm13.7-11.3 1.6-1.6a1 1 0 0 0 0-1.4l-1.9-1.9a1 1 0 0 0-1.4 0l-1.6 1.6 3.3 3.3Z"
+                            fill="currentColor"
+                          />
+                        </svg>
                       </button>
                       <button
                         type="button"
-                        className="btn-table btn-danger"
+                        className="icon-action icon-delete"
                         onClick={() => handleDeleteFromRow(row)}
                         disabled={deletingInvestment.loading}
+                        title="Delete transaction"
+                        aria-label="Delete transaction"
                       >
-                        Delete
+                        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+                          <path
+                            d="M9 3h6l1 2h4v2H4V5h4l1-2Zm1 7h2v8h-2v-8Zm4 0h2v8h-2v-8ZM7 10h2v8H7v-8Zm-1 10h12l-1 1H7l-1-1Z"
+                            fill="currentColor"
+                          />
+                        </svg>
                       </button>
                     </div>
                   </td>
@@ -388,17 +466,36 @@ export function InvestmentsTable({
           <div className="modal">
             <h3>{transactionMode === 'create' ? 'Create Transaction' : 'Edit Transaction'}</h3>
             <div className="form-group">
-              <label htmlFor="asset">Asset</label>
-              <input
+              <label htmlFor="asset">Type</label>
+              <select
                 id="asset"
                 value={draft.asset}
-                onChange={(event) => setDraft((prev) => ({ ...prev, asset: event.target.value }))}
-                placeholder="bitcoin"
-              />
+                onChange={(event) => {
+                  const nextType = normalizeTransactionType(event.target.value);
+                  if (isTransferType(nextType)) {
+                    setDraft((prev) => ({ ...prev, asset: nextType, eurAmount: '0', price: '0' }));
+                    setIsPriceManuallyEdited(false);
+                    return;
+                  }
+
+                  setDraft((prev) => ({
+                    ...prev,
+                    asset: nextType,
+                    eurAmount: prev.eurAmount === '0' ? '' : prev.eurAmount
+                  }));
+                  setIsPriceManuallyEdited(false);
+                }}
+              >
+                {TRANSACTION_TYPES.map((transactionType) => (
+                  <option key={transactionType} value={transactionType}>
+                    {transactionType}
+                  </option>
+                ))}
+              </select>
               {draftErrors.asset ? <p className="field-error">{draftErrors.asset}</p> : null}
             </div>
             <div className="form-group">
-              <label htmlFor="amount">Amount</label>
+              <label htmlFor="amount">Amount (BTC)</label>
               <input
                 id="amount"
                 type="number"
@@ -409,6 +506,20 @@ export function InvestmentsTable({
               />
               {draftErrors.amount ? <p className="field-error">{draftErrors.amount}</p> : null}
             </div>
+            {showEurAmount ? (
+              <div className="form-group">
+                <label htmlFor="eur-amount">{eurAmountLabel(draft.asset)}</label>
+                <input
+                  id="eur-amount"
+                  type="number"
+                  min="0"
+                  step="any"
+                  value={draft.eurAmount}
+                  onChange={(event) => setDraft((prev) => ({ ...prev, eurAmount: event.target.value }))}
+                />
+                {draftErrors.eurAmount ? <p className="field-error">{draftErrors.eurAmount}</p> : null}
+              </div>
+            ) : null}
             <div className="form-group">
               <label htmlFor="price">Price</label>
               <input
@@ -417,7 +528,11 @@ export function InvestmentsTable({
                 min="0"
                 step="any"
                 value={draft.price}
-                onChange={(event) => setDraft((prev) => ({ ...prev, price: event.target.value }))}
+                onChange={(event) => {
+                  setIsPriceManuallyEdited(true);
+                  setDraft((prev) => ({ ...prev, price: event.target.value }));
+                }}
+                disabled={isTransferType(draft.asset)}
               />
               {draftErrors.price ? <p className="field-error">{draftErrors.price}</p> : null}
             </div>

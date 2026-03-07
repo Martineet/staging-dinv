@@ -15,6 +15,7 @@ export type InvestmentFormInput = {
   portfolio_id: string;
   asset: string;
   amount: number;
+  eur_amount: number;
   price: number;
   date: string;
 };

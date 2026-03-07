@@ -34,7 +34,7 @@ function toInvestmentInsert(payload: InvestmentFormInput): InvestmentInsert {
     type: payload.asset.trim(),
     btc_amount: payload.amount,
     purchase_price: payload.price,
-    eur_amount: payload.amount * payload.price,
+    eur_amount: payload.eur_amount,
     date_swap: payload.date,
     notes: null,
     commission: 0,
