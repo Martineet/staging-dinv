@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useAuth } from '@/hooks/useAuth';
 
 type ChangePasswordModalProps = {
@@ -63,7 +64,7 @@ export function ChangePasswordModal({ isOpen, onClose }: ChangePasswordModalProp
 
   if (!isOpen) return null;
 
-  return (
+  return createPortal(
     <div className="modal-overlay open" onClick={(event) => event.currentTarget === event.target && handleClose()}>
       <div className="modal">
         <h3>Change Password</h3>
@@ -111,6 +112,7 @@ export function ChangePasswordModal({ isOpen, onClose }: ChangePasswordModalProp
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
