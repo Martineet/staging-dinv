@@ -649,6 +649,8 @@ button:disabled {
   z-index: 500;
   align-items: center;
   justify-content: center;
+  padding: 24px 16px;
+  overflow-y: auto;
 }
 
 .modal-overlay.open {
@@ -662,6 +664,9 @@ button:disabled {
   padding: 36px;
   width: 100%;
   max-width: 400px;
+  max-height: calc(100dvh - 48px);
+  overflow-y: auto;
+  margin: auto;
   box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
 }
 
