@@ -796,9 +796,54 @@ button:disabled {
   min-width: 220px;
 }
 
+.portfolio-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
 .portfolio-selector {
   padding: 8px 12px;
   font-size: 14px;
+}
+
+.btn-inline {
+  width: auto;
+  padding: 8px 12px;
+  font-size: 13px;
+}
+
+.table-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-table {
+  width: auto;
+  padding: 8px 10px;
+  font-size: 12px;
+}
+
+.btn-danger {
+  background: #b91c1c;
+  color: #f9fafb;
+}
+
+.btn-danger:hover {
+  background: #991b1b;
+  transform: none;
+}
+
+.modal-actions-delete {
+  margin-top: 14px;
+}
+
+.field-error {
+  color: #ef4444;
+  margin-top: 8px;
+  font-size: 13px;
 }
 
 .table-scroll {
@@ -1029,6 +1074,14 @@ tr:hover {
   .portfolio-select-wrap {
     width: 100%;
     min-width: 0;
+  }
+
+  .portfolio-controls {
+    justify-content: stretch;
+  }
+
+  .btn-inline {
+    width: 100%;
   }
 
   .dinversions-logo {

@@ -20,6 +20,8 @@ export function buildInvestmentRows(
     const profitLoss = currentValue - eurAmount;
 
     return {
+      id: String(investment.id ?? `${investment.portfolio_id}-${investment.date_swap}`),
+      portfolioId: investment.portfolio_id,
       date: investment.date_swap,
       type: investment.type ?? '-',
       notes: investment.notes ?? '-',

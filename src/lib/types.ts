@@ -11,6 +11,14 @@ export type Investment = {
   date_swap: string;
 };
 
+export type InvestmentFormInput = {
+  portfolio_id: string;
+  asset: string;
+  amount: number;
+  price: number;
+  date: string;
+};
+
 export type MemberProfile = {
   member_id: string;
   display_name: string | null;
@@ -31,6 +39,8 @@ export type PortfolioSummary = {
 };
 
 export type InvestmentRow = {
+  id: string;
+  portfolioId: string;
   date: string;
   type: string;
   notes: string;

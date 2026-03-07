@@ -19,12 +19,25 @@ export default function DashboardPage() {
   const {
     member,
     portfolios,
+    selectedPortfolio,
     selectedPortfolioId,
     investments,
     loading: investmentsLoading,
     error,
     refresh,
-    selectPortfolio
+    selectPortfolio,
+    createPortfolio,
+    renamePortfolio,
+    deletePortfolio,
+    createInvestment,
+    updateInvestment,
+    deleteInvestment,
+    creatingPortfolio,
+    renamingPortfolio,
+    deletingPortfolio,
+    creatingInvestment,
+    updatingInvestment,
+    deletingInvestment
   } = useInvestments(user);
 
   useEffect(() => {
@@ -49,10 +62,7 @@ export default function DashboardPage() {
     return buildInvestmentRows(investments, price);
   }, [investments, price]);
 
-  const selectedPortfolioName = useMemo(() => {
-    if (!selectedPortfolioId) return null;
-    return portfolios.find((portfolio) => portfolio.portfolio_id === selectedPortfolioId)?.name ?? null;
-  }, [portfolios, selectedPortfolioId]);
+  const selectedPortfolioName = selectedPortfolio?.name ?? null;
 
   if (loading) {
     return (
@@ -69,6 +79,7 @@ export default function DashboardPage() {
       <DashboardHeader displayName={displayName} />
       <StatsGrid totals={totals} />
       <InvestmentsTable
+        investments={investments}
         rows={rows}
         loading={investmentsLoading}
         error={error}
@@ -76,6 +87,18 @@ export default function DashboardPage() {
         selectedPortfolioId={selectedPortfolioId}
         selectedPortfolioName={selectedPortfolioName}
         onSelectPortfolio={selectPortfolio}
+        onCreatePortfolio={createPortfolio}
+        onRenamePortfolio={renamePortfolio}
+        onDeletePortfolio={deletePortfolio}
+        onCreateInvestment={createInvestment}
+        onUpdateInvestment={updateInvestment}
+        onDeleteInvestment={deleteInvestment}
+        creatingPortfolio={creatingPortfolio}
+        renamingPortfolio={renamingPortfolio}
+        deletingPortfolio={deletingPortfolio}
+        creatingInvestment={creatingInvestment}
+        updatingInvestment={updatingInvestment}
+        deletingInvestment={deletingInvestment}
       />
       <Logos />
       <Footer />
